@@ -1,7 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '@/app/globals.css'
+
+// providers
 import { ThemeProvider } from '@/components/providers/theme-provider'
+import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider'
+
+// ui
+import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +30,10 @@ export default function RootLayout({
           enableSystem={false}
           storageKey='theme'
         >
-          {children}
+          <ReactQueryProvider>
+            {children}
+            <Toaster />
+          </ReactQueryProvider>
         </ThemeProvider>
       </body>
     </html>
