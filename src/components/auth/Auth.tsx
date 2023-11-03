@@ -1,8 +1,9 @@
 "use client"
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
+import axios, { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { Context } from '@/components/context/Context';
 
 // ui components
 import { Button } from "@/components/ui/button"
@@ -29,9 +30,10 @@ import { ToastAction } from '@/components/ui/toast';
 import { usernameRegex, emailRegex, passwordRegex } from '@/constants/constants';
 
 const Auth = () => {
+  const { setUser } = useContext(Context)
   const [username,setUsername] = useState("") // this state is shared between login and sign up for UX
   const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("")
+  const [password,setPassword] = useState("") // this state is shared between login and sign up for UX
   const [tabValue,setTabValue] = useState("signin")
   const { toast } = useToast()
   const router = useRouter()
@@ -47,7 +49,7 @@ const Auth = () => {
   const { mutate: loginMutation } = useMutation({
     mutationFn: handleLogin,
     onSuccess: (response) => {
-      // console.log(response) //! here use the response to set the context user state
+      setUser(response)
       router.push("/")
     },
     onError: (error: any) => {
@@ -58,13 +60,40 @@ const Auth = () => {
   })
 
   const handleSignup = async () => {
-    if(!usernameRegex.test(username))
-    await axios.post("/api/auth/signup", {
+    // form validation
+    if(!usernameRegex.test(username)) throw new Error("Invalid username format.")
+    if(!emailRegex.test(email)) throw new Error("Invalid email format.")
+    if(!passwordRegex.test(password)) throw new Error("Password is too short.")
+
+    const response = await axios.post("/api/auth/signup", {
       username,
       email,
       password
     })
+    return response.data
   }
+
+  const { mutate: signUpMutation } = useMutation({
+    mutationFn: handleSignup,
+    onSuccess: (response) => {
+      setUser(response)
+      router.push("/")
+    },
+    onError: (error: AxiosError) => {
+      setUser({ loggedIn: false })
+      if(error.response?.data === "USEREXISTS") {
+        return toast({
+          description: `User with the username "${username}" already exists`,
+          duration: 3000
+        })
+      }
+      toast({
+        variant: "destructive",
+        description: error.message,
+        duration: 3000
+      })
+    }
+  })
   
   const handleWrongUsername = () => {
     toast({
@@ -134,7 +163,7 @@ const Auth = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleSignup}>Create Account!</Button>
+              <Button onClick={() => signUpMutation()}>Create Account!</Button>
             </CardFooter>
           </Card>
         </TabsContent>

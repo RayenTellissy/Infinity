@@ -5,6 +5,7 @@ import '@/app/globals.css'
 // providers
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider'
+import { ContextProvider } from '@/components/context/Context'
 
 // ui
 import { Toaster } from '@/components/ui/toaster'
@@ -12,8 +13,7 @@ import { Toaster } from '@/components/ui/toaster'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Infinity',
-  description: '',
+  title: 'Infinity'
 }
 
 export default function RootLayout({
@@ -31,8 +31,10 @@ export default function RootLayout({
           storageKey='theme'
         >
           <ReactQueryProvider>
-            {children}
-            <Toaster />
+            <ContextProvider>
+              {children}
+              <Toaster />
+            </ContextProvider>
           </ReactQueryProvider>
         </ThemeProvider>
       </body>

@@ -53,8 +53,22 @@ export async function POST(req: NextRequest) {
       sameSite: "strict",
       maxAge: sevenDaysInSeconds
     })
+    cookieStore.set({
+      name: "id",
+      value: user.id,
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: sevenDaysInSeconds
+    })
 
-    return new NextResponse("Logged in!", {
+    return new NextResponse(JSON.stringify({
+      loggedIn: true,
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      image: user.image
+    }), {
       status: 200
     })
   }
