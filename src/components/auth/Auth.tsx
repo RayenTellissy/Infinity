@@ -37,7 +37,7 @@ const Auth = () => {
   const [tabValue,setTabValue] = useState("signin")
   const { toast } = useToast()
   const router = useRouter()
-  
+
   const handleLogin = async () => {
     const response = await axios.post("/api/auth/login", {
       username,
