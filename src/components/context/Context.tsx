@@ -9,19 +9,28 @@ import { user } from './ContextTypes';
 type ContextType = {
   user: user
   setUser: React.Dispatch<React.SetStateAction<user>>
+  currentPage: string
+  setCurrentPage: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const Context = createContext<ContextType>({
   user: { loggedIn: null },
-  setUser: () => {}
+  setUser: () => {},
+  currentPage: "",
+  setCurrentPage: () => {}
 })
 
 export const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [user,setUser] = useState<user>({ loggedIn: null })
+  const [currentPage,setCurrentPage] = useState("")
   
   useEffect(() => {
     authMutation()
   }, [])
+
+  useEffect(() => {
+    console.log(currentPage)
+  }, [currentPage])
   
   const authenticateUser = async () => {
     const response = await axios.get("/api/auth/authenticateUser", {
@@ -39,13 +48,15 @@ export const ContextProvider = ({ children }: { children: React.ReactNode }) => 
       setUser({ loggedIn: false })
     }
   })
-  
+
   if(user.loggedIn === null) return <div>Authenticating...</div>
   
   return (
     <Context.Provider value={{
       user,
-      setUser
+      setUser,
+      currentPage,
+      setCurrentPage
     }}>
       { children }
     </Context.Provider>

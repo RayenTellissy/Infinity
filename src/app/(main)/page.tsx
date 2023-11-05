@@ -4,8 +4,7 @@ import { ModeToggle } from '@/components/ui/theme-toggle'
 
 export default function Home() {
   return (
-    <div className='h-screen w-screen'>
-      videos and stuff
+    <div className='h-full'>
       <ModeToggle />
     </div>
   )
