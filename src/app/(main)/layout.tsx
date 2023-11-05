@@ -10,7 +10,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <Navbar />
       <div className='flex flex-row'>
         <Sidebar />
-        {children}
+        { children }
       </div>
     </div>
   );

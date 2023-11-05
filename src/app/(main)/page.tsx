@@ -6,6 +6,7 @@ export default function Home() {
   return (
     <div className='h-screen w-screen'>
       videos and stuff
+      <ModeToggle />
     </div>
   )
 }

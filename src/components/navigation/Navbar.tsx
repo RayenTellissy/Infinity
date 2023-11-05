@@ -22,6 +22,7 @@ const Navbar = () => {
 
   return (
     <div className='h-full p-2 flex flex-row items-center'>
+      <Button onClick={() => setUser({ loggedIn: true, username: "hookx" })}>fake auth</Button>
       <Button className='p-0' size="icon" variant="icon">
         <AlignJustify />
       </Button>

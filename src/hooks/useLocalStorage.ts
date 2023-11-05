@@ -30,7 +30,7 @@ const useLocalStorage = (key: string) => {
     }
   }
 
-  return { setItem, getItem }
+  return { setItem, getItem, removeItem }
 };
 
 export default useLocalStorage;
