@@ -9,6 +9,9 @@ import { Context } from '@/components/context/Context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+// icons
+import { Upload } from 'lucide-react';
+
 const Navbar = () => {
   const { user, setUser } = useContext(Context)
   const router = useRouter()
@@ -27,11 +30,16 @@ const Navbar = () => {
       </Button>
       <p>Infinity</p>
       <Input className='w-1/3 m-auto' placeholder='Search' />
-      {user.loggedIn && <Button onClick={logout}>Logout</Button>}
-      {!user.loggedIn ? <Button className='p-3 flex gap-1' variant="icon" onClick={() => router.push("/auth")}>
-        <UserCircle2 />
-        <p>Sign in</p>
-      </Button> : <p>{ user.username }</p>}
+      <div className='flex flex-row items-center gap-3'>
+        <Button className='w-10 h-10 p-0 rounded-full' variant="ghost" onClick={() => router.push("/upload")}>
+          <Upload />
+        </Button>
+        {user.loggedIn && <Button onClick={logout}>Logout</Button>}
+        {!user.loggedIn ? <Button className='p-3 flex gap-1' variant="icon" onClick={() => router.push("/auth")}>
+          <UserCircle2 />
+          <p>Sign in</p>
+        </Button> : <p>{ user.username }</p>}
+      </div>
     </div>
   );
 };

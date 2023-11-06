@@ -8,6 +8,9 @@ import SidebarButton from "@/components/common/SidebarButton"
 import SidebarSeperator from "@/components/common/SidebarSeperator"
 import SidebarSubscriptions from "@/components/navigation/SidebarSubscriptions/SidebarSubscriptions"
 
+// icons
+import { Home, Rss, User2, LayoutDashboard, History, Clock4 } from "lucide-react"
+
 const Sidebar = () => {
   const { user } = useContext(Context)
   const router = useRouter()
@@ -33,14 +36,14 @@ const Sidebar = () => {
   }
 
   return (
-    <div className='flex flex-col w-52'>
-      <SidebarButton text="Home" callback={() => router.push("/")}/>
-      <SidebarButton text="Your Channel" callback={openChannel}/>
+    <div className='flex flex-col w-56 p-3'>
+      <SidebarButton text="Home" icon={<Home />} callback={() => router.push("/")}/>
+      <SidebarButton text="Your Channel" icon={<User2 />} callback={openChannel}/>
       <SidebarSeperator />
-      <SidebarButton text="Dashboard" callback={openDashboard}/>
-      <SidebarButton text="Subscriptions" callback={openSubscriptions}/>
-      <SidebarButton text="History" callback={() => router.push("/history")}/>
-      <SidebarButton text="Watch later" callback={openWatchLater}/>
+      <SidebarButton text="Dashboard" icon={<LayoutDashboard />} callback={openDashboard}/>
+      <SidebarButton text="Subscriptions" icon={<Rss />} callback={openSubscriptions}/>
+      <SidebarButton text="History" icon={<History />} callback={() => router.push("/history")}/>
+      <SidebarButton text="Watch later" icon={<Clock4 />} callback={openWatchLater}/>
       <SidebarSeperator />
       <SidebarSubscriptions />
     </div>

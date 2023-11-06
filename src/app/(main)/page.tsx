@@ -1,11 +1,6 @@
-// ui components
-import { Button } from '@/components/ui/button'
-import { ModeToggle } from '@/components/ui/theme-toggle'
+import React from "react"
+import Home from "@/components/home/Home"
 
-export default function Home() {
-  return (
-    <div className='h-full'>
-      <ModeToggle />
-    </div>
-  )
+export default function page() {
+  return <Home />
 }

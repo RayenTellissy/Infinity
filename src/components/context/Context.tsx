@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 
@@ -27,10 +27,6 @@ export const ContextProvider = ({ children }: { children: React.ReactNode }) => 
   useEffect(() => {
     authMutation()
   }, [])
-
-  useEffect(() => {
-    console.log(currentPage)
-  }, [currentPage])
   
   const authenticateUser = async () => {
     const response = await axios.get("/api/auth/authenticateUser", {
@@ -62,3 +58,7 @@ export const ContextProvider = ({ children }: { children: React.ReactNode }) => 
     </Context.Provider>
   );
 };
+
+export const useCon = () => {
+  return useContext(Context)
+}
