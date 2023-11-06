@@ -10,3 +10,23 @@ export const primsaUserSafeDetails = {
   email: true,
   image: true
 }
+
+export const videoTags = [
+  "Gaming",
+  "Technology",
+  "Cooking/Food",
+  "Travel", 
+  "Vlogging", 
+  "Fitness", 
+  "Education", 
+  "Tutorial", 
+  "News", 
+  "Sports",
+  "Art",
+  "Comedy",
+  "Cars",
+  "Unboxing",
+  "Documentaries",
+  "Photography",
+  "Motivation"
+]

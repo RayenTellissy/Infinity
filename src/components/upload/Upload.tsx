@@ -1,22 +1,48 @@
 "use client"
-import React from 'react';
-import { storage, app } from '@/lib/firebase';
+import React, { useRef, useState } from 'react';
+import { v4 } from "uuid"
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-// ui components
-import { Button } from "@/components/ui/button"
+// components
+import SelectFiles from "@/components/upload/SelectFiles"
+import Uploading from "@/components/upload/Uploading"
 
-// icons
-import { ArrowUpFromLine } from "lucide-react"
+// storage instance
+import { storage } from '@/lib/firebase';
+
 
 const Upload = () => {
+  const [uploadProgress,setUploadProgress] = useState(0)
+  const [isUploading, setIsUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  const uploadFile = async (file: File) => {
+    if (!file) return
+    setIsUploading(true)
+    const storageRef = ref(storage, `profile_pictures/${v4()}`)
+    const uploadTask = uploadBytesResumable(storageRef, file)
+
+    uploadTask.on("state_changed", (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      setUploadProgress(progress)
+      console.log(progress)
+    })
+
+    clearInput()
+  }
+
+  const clearInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
   return (
     <div className='flex flex-col h-screen w-screen items-center justify-center gap-3'>
-      <div className='p-20 rounded-full bg-[#1e1f1e]'>
-        <ArrowUpFromLine size={60} />
-      </div>
-      <p>Drag and drop video files to upload</p>
-      <Button onClick={() => document.getElementById("upload-video-input")?.click()}>SELECT FILES</Button>
-      <input className='hidden' id='upload-video-input' type='file' />
+      {isUploading
+        ? <SelectFiles fileInputRef={fileInputRef} uploadFile={uploadFile} />
+        : <Uploading uploadProgress={uploadProgress} />
+      }
     </div>
   );
 };
