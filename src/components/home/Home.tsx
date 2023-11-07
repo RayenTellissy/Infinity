@@ -1,12 +1,12 @@
 "use client"
-import React, { useContext, useEffect } from 'react';
-import { Context } from "@/components/context/Context"
+import React, { useEffect } from 'react';
+import { useCon } from "@/components/context/Context"
 
 // ui components
 import { ModeToggle } from "@/components/ui/theme-toggle"
 
 const Home = () => {
-  const { setCurrentPage } = useContext(Context)
+  const { setCurrentPage } = useCon()
 
   useEffect(() => {
     setCurrentPage("Home")

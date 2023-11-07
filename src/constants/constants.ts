@@ -30,3 +30,5 @@ export const videoTags = [
   "Photography",
   "Motivation"
 ]
+
+export const purpleButtonStyling = "bg-purple-600 hover:bg-purple-700 active:bg-purple-500 dark:text-white"

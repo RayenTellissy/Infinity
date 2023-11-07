@@ -22,7 +22,7 @@ model Users {
 model Videos {
   id            String          @id @default(cuid())
   title         String
-  description   String
+  description   String?
   thumbnail     String
   duration      Int
   visibility    Visibility

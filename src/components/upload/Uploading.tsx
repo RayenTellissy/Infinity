@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 // ui components
 import { Progress } from "@/components/ui/progress"
@@ -11,25 +13,52 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 
 // components
-import TagButton from './TagButton';
+import Tag from './buttons/Tag';
+import Post from "./buttons/Post"
+import ThumbnailUploader from './buttons/ThumbnailUploader';
+import { useCon } from "@/components/context/Context"
 
 // constants
 import { videoTags } from '@/constants/constants';
 
 type UploadingProps = {
   uploadProgress: number
+  finishedUploading: boolean
+  videoDuration: number | null
 }
 
-const Uploading = ({ uploadProgress }: UploadingProps) => {
+const Uploading = ({ uploadProgress, finishedUploading, videoDuration }: UploadingProps) => {
+  const { user } = useCon()
   const [title,setTitle] = useState("")
   const [description,setDescription] = useState("")
+  const [thumbnailUrl,setThumbnailUrl] = useState<string | null>(null)
   const [chosenTags,setChosenTags] = useState<string[]>([])
   const [allTags,setAllTags] = useState<string[]>(videoTags)
-  const [thumbnail,setThumbnail] = useState<string | null>(null)
-  const [uploadingThumbnail,setUploadingThumbnail] = useState(false)
   const [visibility,setVisibility] = useState<"public" | "private">("public")
   const { toast } = useToast()
   const router = useRouter()
+
+  const uploadVideo = async () => {
+    const response = await axios.post("/api/videos/upload", {
+      title,
+      description,
+      thumbnail: thumbnailUrl,
+      duration: videoDuration,
+      visibility: visibility,
+      ownerId: user.id
+    })
+    return response.data
+  }
+
+  const { mutate: postVideo, isPending, isSuccess } = useMutation({
+    mutationFn: uploadVideo,
+    onSuccess: (response) => {
+      router.push("/")
+    },
+    onError: (error) => {
+      console.log(error)
+    }
+  })
 
   const moveToChosen = (tag: string) => {
     if(chosenTags.length >= 3) {
@@ -47,8 +76,12 @@ const Uploading = ({ uploadProgress }: UploadingProps) => {
     setAllTags(prevTags => [...prevTags, tag])
   }
 
-  const canPost = () => {
-    return uploadProgress === 100 && thumbnail !== null && title !== "" && chosenTags.length > 0
+  const returnFormError = () => {
+    if(!finishedUploading) return "Upload has not yet finished!"
+    if(title === "") return "Please Provide a title for the video."
+    if(!thumbnailUrl) return "Please upload a thumbnail for the video."
+    if(chosenTags.length === 0) return "Please choose at least 1 tag for the video."
+    return null
   }
 
   const cancelUpload = () => {
@@ -60,8 +93,7 @@ const Uploading = ({ uploadProgress }: UploadingProps) => {
     <div className='h-screen w-screen'>
       <div className='w-full flex items-center justify-center p-4'>
         <div className='w-1/3 flex flex-col items-center jusify-center gap-3'>
-          <p>Uploading your video</p>
-          <Progress value={uploadProgress} />
+          {!finishedUploading ? <Progress value={uploadProgress} /> : <p>Uploading done!</p>}
         </div>
       </div>
       <div className='w-full flex flex-row'>
@@ -74,28 +106,22 @@ const Uploading = ({ uploadProgress }: UploadingProps) => {
             <Label htmlFor='upload-video-tags'>Tags</Label>
             <div id='upload-video-tags' className='flex flex-row flex-wrap gap-3 p-5 rounded bg-[#2b2c2b]'>
               {chosenTags.length !== 0 ? chosenTags.map((e, i) => {
-                return <TagButton key={i} text={e} callback={() => moveToAll(e)} isChosen />
-              }) : <p className='text-slate-200'>No Tags Chosen.</p>}
+                return <Tag key={i} text={e} callback={() => moveToAll(e)} isChosen />
+              }) : <p className='text-slate-200'>No Tags Chosen</p>}
             </div>
             <Label htmlFor='upload-video-available-tags'>Available Tags:</Label>
             <div id='upload-video-available-tags' className='flex flex-row flex-wrap gap-3 p-5 rounded bg-[#2b2c2b]'>
               {allTags.length !== 0 && allTags.map((e, i) => {
-                return <TagButton key={i} text={e} callback={() => moveToChosen(e)} />
+                return <Tag key={i} text={e} callback={() => moveToChosen(e)} />
               }) }
             </div>
           </div>
         </div>
-        <div className='flex-1'>
-          {!thumbnail
-          ? <div className='h-1/2 w-full border-2 rounded border-purple-500 flex flex-col items-center justify-center'>
-              <p>UPLOAD THUMBNAIL</p>
-              <p className='text-slate-300'>You can also drag and drop the image here.</p>
-              <input type="file" accept='image/*' />
-            </div>
-          : <img src={thumbnail} />}
+        <div className='flex-1 flex flex-col gap-6'>
+          <ThumbnailUploader thumbnailUrl={thumbnailUrl} setThumbnailUrl={setThumbnailUrl}/>
           <div className='p-4 flex flex-col gap-3' id='upload-video-privacy'>
             <Label htmlFor='upload-video-privacy'>Privacy</Label>
-            <RadioGroup defaultValue={visibility}>
+            <RadioGroup defaultValue={visibility} onValueChange={(value: "public" | "private") => setVisibility(value)}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="public" id="r1" />
                 <Label htmlFor="r1">Public</Label>
@@ -108,7 +134,7 @@ const Uploading = ({ uploadProgress }: UploadingProps) => {
           </div>
           <div className='flex flex-row justify-end p-4'>
             <Button variant="link" onClick={cancelUpload}>Cancel</Button>
-            <Button disabled={!canPost()}>Post</Button>
+            <Post error={returnFormError()} callback={postVideo} disabled={isPending || isSuccess}/>
           </div>
         </div>
       </div>
