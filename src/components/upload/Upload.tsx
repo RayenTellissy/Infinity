@@ -10,7 +10,6 @@ import Uploading from "@/components/upload/Uploading"
 // storage instance
 import { storage } from '@/lib/firebase';
 
-
 const Upload = () => {
   const [uploadProgress,setUploadProgress] = useState(0)
   const [isUploading, setIsUploading] = useState(false)

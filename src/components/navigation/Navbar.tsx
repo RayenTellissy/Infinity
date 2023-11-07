@@ -1,9 +1,9 @@
 "use client"
-import React, { useContext } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { AlignJustify, UserCircle2 } from "lucide-react"
 import { useRouter } from 'next/navigation';
-import { Context } from '@/components/context/Context';
+import { useCon } from '@/components/context/Context';
 
 // ui components
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Upload } from 'lucide-react';
 
 const Navbar = () => {
-  const { user, setUser } = useContext(Context)
+  const { user, setUser, showSidebar, setShowSidebar } = useCon()
   const router = useRouter()
 
   const logout = async () => {
@@ -25,7 +25,7 @@ const Navbar = () => {
 
   return (
     <div className='h-full p-2 flex flex-row items-center'>
-      <Button className='p-0' size="icon" variant="icon">
+      <Button className='p-0' size="icon" variant="icon" onClick={() => setShowSidebar(!showSidebar)}>
         <AlignJustify />
       </Button>
       <p>Infinity</p>

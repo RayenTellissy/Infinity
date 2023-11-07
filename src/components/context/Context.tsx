@@ -11,18 +11,23 @@ type ContextType = {
   setUser: React.Dispatch<React.SetStateAction<user>>
   currentPage: string
   setCurrentPage: React.Dispatch<React.SetStateAction<string>>
+  showSidebar: boolean
+  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const Context = createContext<ContextType>({
   user: { loggedIn: null },
   setUser: () => {},
   currentPage: "",
-  setCurrentPage: () => {}
+  setCurrentPage: () => {},
+  showSidebar: true,
+  setShowSidebar: () => {}
 })
 
 export const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [user,setUser] = useState<user>({ loggedIn: null })
   const [currentPage,setCurrentPage] = useState("")
+  const [showSidebar,setShowSidebar] = useState(true)
   
   useEffect(() => {
     authMutation()
@@ -52,7 +57,9 @@ export const ContextProvider = ({ children }: { children: React.ReactNode }) => 
       user,
       setUser,
       currentPage,
-      setCurrentPage
+      setCurrentPage,
+      showSidebar,
+      setShowSidebar
     }}>
       { children }
     </Context.Provider>

@@ -1,9 +1,9 @@
 "use client"
-import React, { useContext } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 
 // components
-import { Context } from '@/components/context/Context';
+import { useCon } from '@/components/context/Context';
 import SidebarButton from "@/components/common/SidebarButton"
 import SidebarSeperator from "@/components/common/SidebarSeperator"
 import SidebarSubscriptions from "@/components/navigation/SidebarSubscriptions/SidebarSubscriptions"
@@ -12,7 +12,7 @@ import SidebarSubscriptions from "@/components/navigation/SidebarSubscriptions/S
 import { Home, Rss, User2, LayoutDashboard, History, Clock4 } from "lucide-react"
 
 const Sidebar = () => {
-  const { user } = useContext(Context)
+  const { user } = useCon()
   const router = useRouter()
 
   const openChannel = () => {

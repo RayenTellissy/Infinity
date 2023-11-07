@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button"
 
 type TagButtonProps = {
   text: string
-  callback: (text: string) => void
+  callback: () => void
 }
 
 const TagButton = ({ text, callback }: TagButtonProps) => {
-  return <Button className="" onClick={() => callback(text)}>{ text }</Button>
+  return <Button className="" onClick={callback}>{ text }</Button>
 };
 
 export default TagButton;
