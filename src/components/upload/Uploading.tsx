@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 // ui components
 import { Progress } from "@/components/ui/progress"
@@ -20,14 +21,15 @@ type UploadingProps = {
 }
 
 const Uploading = ({ uploadProgress }: UploadingProps) => {
+  const [title,setTitle] = useState("")
+  const [description,setDescription] = useState("")
   const [chosenTags,setChosenTags] = useState<string[]>([])
   const [allTags,setAllTags] = useState<string[]>(videoTags)
   const [thumbnail,setThumbnail] = useState<string | null>(null)
   const [uploadingThumbnail,setUploadingThumbnail] = useState(false)
   const [visibility,setVisibility] = useState<"public" | "private">("public")
   const { toast } = useToast()
-
-  console.log(visibility)
+  const router = useRouter()
 
   const moveToChosen = (tag: string) => {
     if(chosenTags.length >= 3) {
@@ -45,6 +47,15 @@ const Uploading = ({ uploadProgress }: UploadingProps) => {
     setAllTags(prevTags => [...prevTags, tag])
   }
 
+  const canPost = () => {
+    return uploadProgress === 100 && thumbnail !== null && title !== "" && chosenTags.length > 0
+  }
+
+  const cancelUpload = () => {
+    //TODO: to be finished
+    router.push("/")
+  }
+
   return (
     <div className='h-screen w-screen'>
       <div className='w-full flex items-center justify-center p-4'>
@@ -56,14 +67,14 @@ const Uploading = ({ uploadProgress }: UploadingProps) => {
       <div className='w-full flex flex-row'>
         <div className='flex flex-col p-4 gap-3 w-1/2'>
           <Label htmlFor='upload-video-title'>Title</Label>
-          <Input id='upload-video-title' />
+          <Input id='upload-video-title' onChange={e => setTitle(e.target.value)} />
           <Label htmlFor='upload-video-description'>Description</Label>
-          <Textarea id='upload-video-description' />
+          <Textarea id='upload-video-description' onChange={e => setDescription(e.target.value)} />
           <div className='flex flex-col gap-3'>
             <Label htmlFor='upload-video-tags'>Tags</Label>
             <div id='upload-video-tags' className='flex flex-row flex-wrap gap-3 p-5 rounded bg-[#2b2c2b]'>
               {chosenTags.length !== 0 ? chosenTags.map((e, i) => {
-                return <TagButton key={i} text={e} callback={() => moveToAll(e)} />
+                return <TagButton key={i} text={e} callback={() => moveToAll(e)} isChosen />
               }) : <p className='text-slate-200'>No Tags Chosen.</p>}
             </div>
             <Label htmlFor='upload-video-available-tags'>Available Tags:</Label>
@@ -96,8 +107,8 @@ const Uploading = ({ uploadProgress }: UploadingProps) => {
             </RadioGroup>
           </div>
           <div className='flex flex-row justify-end p-4'>
-            <Button variant="link">Cancel</Button>
-            <Button disabled={uploadProgress !== 100}>Post</Button>
+            <Button variant="link" onClick={cancelUpload}>Cancel</Button>
+            <Button disabled={!canPost()}>Post</Button>
           </div>
         </div>
       </div>

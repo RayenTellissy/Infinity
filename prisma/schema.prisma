@@ -8,10 +8,50 @@ datasource db {
 }
 
 model Users {
+  id            String          @id @default(cuid())
+  username      String          @unique
+  email         String          @unique
+  password      String
+  image         String?
+  created_at    DateTime        @default(now())
+  Videos        Videos[]
+  VideoLikes    VideoLikes[]
+  VideoComments VideoComments[]
+}
+
+model Videos {
+  id            String          @id @default(cuid())
+  title         String
+  description   String
+  thumbnail     String
+  duration      Int
+  visibility    Visibility
+  owner         Users           @relation(fields: [ownerId], references: [id])
+  ownerId       String
+  created_at    DateTime        @default(now())
+  VideoLikes    VideoLikes[]
+  VideoComments VideoComments[]
+}
+
+model VideoLikes {
+  id       String @id @default(cuid())
+  user     Users  @relation(fields: [userId], references: [id])
+  userId   String
+  video    Videos @relation(fields: [videosId], references: [id])
+  videosId String
+}
+
+model VideoComments {
   id         String   @id @default(cuid())
-  username   String   @unique
-  email      String   @unique
-  password   String
-  image      String?
+  user       Users    @relation(fields: [userId], references: [id])
+  userId     String
+  video      Videos   @relation(fields: [videoId], references: [id])
+  videoId    String
+  comment    String
   created_at DateTime @default(now())
+}
+
+enum Visibility {
+  public
+  private
 }
