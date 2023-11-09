@@ -4,7 +4,3 @@ import { UploadTaskSnapshot } from "firebase/storage"
 export const returnProgress = (snapshot: UploadTaskSnapshot) => {
   return (snapshot.bytesTransferred / snapshot.totalBytes) * 100
 }
-
-export const isFinished = (snapshot: UploadTaskSnapshot) => {
-  return snapshot.bytesTransferred === snapshot.totalBytes
-}

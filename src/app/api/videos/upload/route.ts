@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { nanoid } from "nanoid"
 import { prisma } from "@/lib/db"
 
 type UploadRequest = {
@@ -8,26 +9,29 @@ type UploadRequest = {
   duration: number
   visibility: "public" | "private"
   ownerId: string
+  url: string
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { title, description, thumbnail, duration, visibility, ownerId }: UploadRequest = await req.json()
+    const { title, description, thumbnail, duration, visibility, ownerId, url }: UploadRequest = await req.json()
 
-    await prisma.videos.create({
+    const video = await prisma.videos.create({
       data: {
+        id: nanoid(),
         title,
         description,
         thumbnail,
         duration,
         visibility,
-        ownerId
+        ownerId,
+        url
       }
     })
 
-    return NextResponse.json("Video Uploaded!", { status: 200 })
+    return NextResponse.json(video, { status: 200 })
   }
   catch(error){
-    return new NextResponse("Internal Error", { status: 500 })
+    return NextResponse.json(error, { status: 500 })
   }
 }

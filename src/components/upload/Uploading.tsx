@@ -25,9 +25,10 @@ type UploadingProps = {
   uploadProgress: number
   finishedUploading: boolean
   videoDuration: number | null
+  videoUrl: string | null
 }
 
-const Uploading = ({ uploadProgress, finishedUploading, videoDuration }: UploadingProps) => {
+const Uploading = ({ uploadProgress, finishedUploading, videoDuration, videoUrl }: UploadingProps) => {
   const { user } = useCon()
   const [title,setTitle] = useState("")
   const [description,setDescription] = useState("")
@@ -45,7 +46,8 @@ const Uploading = ({ uploadProgress, finishedUploading, videoDuration }: Uploadi
       thumbnail: thumbnailUrl,
       duration: videoDuration,
       visibility: visibility,
-      ownerId: user.id
+      ownerId: user.id,
+      url: videoUrl
     })
     return response.data
   }
@@ -53,7 +55,7 @@ const Uploading = ({ uploadProgress, finishedUploading, videoDuration }: Uploadi
   const { mutate: postVideo, isPending, isSuccess } = useMutation({
     mutationFn: uploadVideo,
     onSuccess: (response) => {
-      router.push("/")
+      router.push(`/video/${response.id}`)
     },
     onError: (error) => {
       console.log(error)
