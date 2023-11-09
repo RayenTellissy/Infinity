@@ -7,11 +7,11 @@ import Sidebar from '@/components/navigation/Sidebar';
 import { useCon } from "@/components/context/Context"
 
 const layout = ({ children }: { children: React.ReactNode }) => {
-  const { showSidebar } = useCon()
+  const { showSidebar, showNav } = useCon()
 
   return (
     <div>
-      <Navbar />
+      {showNav && <Navbar />}
       <div className='flex flex-row'>
         {showSidebar && <Sidebar />}
         { children }
