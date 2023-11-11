@@ -11,9 +11,11 @@ type DurationProps = {
 const Duration = ({ duration, currentTime }: DurationProps) => {
   return (
     <div className='flex flex-row grow gap-1 items-center'>
-      <div>{currentTime && formatDuration(currentTime)}</div>
-      /
-      <div>{duration && formatDuration(duration)}</div>
+      {duration && currentTime && <>
+        <div>{currentTime && formatDuration(currentTime)}</div>
+        /
+        <div>{duration && formatDuration(duration)}</div>
+      </>}
     </div>
   );
 };

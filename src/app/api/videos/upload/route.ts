@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid"
-import { prisma } from "@/lib/db"
+import { db } from "@/lib/db"
 
 type UploadRequest = {
   title: string
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     const { title, description, thumbnail, duration, visibility, ownerId, url }: UploadRequest = await req.json()
 
-    const video = await prisma.videos.create({
+    const video = await db.videos.create({
       data: {
         id: nanoid(),
         title,

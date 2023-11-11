@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const video = await prisma.videos.findFirst({
+    const video = await db.videos.findFirst({
       where: {
         id: params.id
       }

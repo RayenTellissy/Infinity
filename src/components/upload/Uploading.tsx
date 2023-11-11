@@ -16,10 +16,16 @@ import { Button } from "@/components/ui/button"
 import Tag from './buttons/Tag';
 import Post from "./buttons/Post"
 import ThumbnailUploader from './buttons/ThumbnailUploader';
-import { useCon } from "@/components/context/Context"
+
+// toasts
+import UploadSuccess from './toasts/UploadSuccess';
+import UploadFailed from './toasts/UploadFailed';
 
 // constants
 import { videoTags } from '@/constants/constants';
+
+// hooks
+import { useCon } from "@/components/context/Context"
 
 type UploadingProps = {
   uploadProgress: number
@@ -55,9 +61,11 @@ const Uploading = ({ uploadProgress, finishedUploading, videoDuration, videoUrl 
   const { mutate: postVideo, isPending, isSuccess } = useMutation({
     mutationFn: uploadVideo,
     onSuccess: (response) => {
+      toast({ action: <UploadSuccess />, duration: 3000 })
       router.push(`/video/${response.id}`)
     },
     onError: (error) => {
+      toast({ action: <UploadFailed />, duration: 3000 })
       console.log(error)
     }
   })

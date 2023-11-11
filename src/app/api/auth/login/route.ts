@@ -9,14 +9,14 @@ import { sevenDaysInSeconds } from "@/constants/constants";
 import { generateAccessToken, generateRefreshToken } from "@/helpers/GenerateTokens";
 
 // db
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
     const { username, password } = await req.json()
     const cookieStore = cookies()
 
-    const user = await prisma.users.findFirst({
+    const user = await db.users.findFirst({
       where: {
         username
       }

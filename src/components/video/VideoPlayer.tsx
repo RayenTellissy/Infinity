@@ -10,12 +10,18 @@ import MiniplayerButton from './PlayerButtons/MiniplayerButton';
 import FullscreenButton from './PlayerButtons/FullscreenButton';
 import Duration from './PlayerButtons/Duration';
 import PlaybackSpeedButton from './PlayerButtons/PlaybackSpeedButton';
+import Timeline from './PlayerButtons/Timeline/Timeline';
+
+// components
+import VideoBuffer from '@/components/common/VideoBuffer';
 
 type VideoPlayerProps = {
   videoUrl: string
 }
 
 var timeoutId: NodeJS.Timeout
+var isScrubbing = false
+
 const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   const [isPlaying,setIsPlaying] = useState(false)
   const [isFullscreen,setIsFullscreen] = useState(false)
@@ -25,35 +31,63 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   const [videoDuration,setVideoDuration] = useState<number | null>(null)
   const [currentTime,setCurrentTime] = useState<number | null>(null)
   const [playbackSpeed,setPlaybackSpeed] = useState(1)
+  const [isBuffering,setIsBuffering] = useState<boolean | null>(null)
+  const [scrubbingTime,setScrubbingTime] = useState<number | null>(null)
   const playerRef = useRef<HTMLVideoElement>(null)
   const videoContainer = document.getElementById("video-container")
   const video = document.querySelector("video")
   const buttonHoverEffect = "opacity-80 hover:opacity-100 transition-opacity duration-200 ease-in-out"
   const { getItem, setItem } = useLocalStorage("volume")
+  const timelineContainer = document.getElementById("timeline-container")
 
   useEffect(() => {
     handleAutoplay()
   }, [])
-
+  
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown)
     video?.addEventListener("enterpictureinpicture", () => setInMini(true))
     video?.addEventListener("leavepictureinpicture", () => setInMini(false))
     video?.addEventListener("volumechange", handleVolumeChange)
-    video?.addEventListener("loadeddata", handleTotalDuration)
+    video?.addEventListener("loadeddata", () => {
+      handleTotalDuration()
+      handleSavedVolume()
+    })
     video?.addEventListener("timeupdate", handleTimeUpdate)
+    timelineContainer?.addEventListener("mousemove", handleTimelineUpdate)
+    timelineContainer?.addEventListener("mousedown", toggleScrubbing)
+    document.addEventListener("mouseup", e => {
+      if(isScrubbing) toggleScrubbing(e)
+    })
+    document.addEventListener("mousemove", e => {
+      if(isScrubbing) handleTimelineUpdate(e)
+    })
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
       video?.removeEventListener("enterpictureinpicture", () => setInMini(true))
       video?.removeEventListener("leavepictureinpicture", () => setInMini(false))
+      video?.removeEventListener("volumechange", handleVolumeChange)
+      video?.removeEventListener("loadeddata", () => {
+        handleTotalDuration()
+        handleSavedVolume()
+      })
+      video?.removeEventListener("timeupdate", handleTimeUpdate)
+      timelineContainer?.removeEventListener("mousemove", handleTimelineUpdate)
+      timelineContainer?.removeEventListener("mousedown", toggleScrubbing)
+      document.removeEventListener("mouseup", e => {
+        if(isScrubbing) toggleScrubbing(e)
+      })
+      document.removeEventListener("mousemove", e => {
+        if(isScrubbing) handleTimelineUpdate(e)
+      })
     }
-  }, [video, videoContainer])
+  }, [video, videoContainer, timelineContainer])
 
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove)
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [isFullscreen])
-  
+
   const togglePlay = () => {
     if(playerRef.current?.paused) {
       playerRef.current.play()
@@ -153,6 +187,12 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
       video.muted = false
     }
     video.volume = volume
+    setItem(volume)
+  }
+  
+  const handleSavedVolume = () => {
+    const savedVolume = getItem()
+    changeVolume(savedVolume)
   }
 
   const handleTotalDuration = () => {
@@ -163,6 +203,8 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   const handleTimeUpdate = () => {
     if(!video) return
     setCurrentTime(video.currentTime)
+    // updating the progress for timeline
+    timelineContainer?.style.setProperty("--progress-position", `${video.currentTime / video.duration}`)
   }
 
   const skip = (duration: number) => {
@@ -180,16 +222,56 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
     setPlaybackSpeed(newPlaybackSpeed)
   }
 
+  const handleTimelineUpdate = (e: MouseEvent) => {
+    const rect = timelineContainer?.getBoundingClientRect()
+    if(!rect || !video) return
+    const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width
+    setScrubbingTime(percent * video.duration)
+    timelineContainer?.style.setProperty("--preview-position", String(percent))
+
+    if(isScrubbing) {
+      e.preventDefault()
+      timelineContainer?.style.setProperty("--progress-position", String(percent))
+    }
+  }
+
+  const toggleScrubbing = (e: MouseEvent) => {
+    const rect = timelineContainer?.getBoundingClientRect()
+    if(!rect || !video) return
+    const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width
+    isScrubbing = (e.buttons & 1) === 1
+    
+    if(isScrubbing) {
+      video?.pause()
+      setIsPlaying(false)
+    }
+    else {
+      video.currentTime = percent * video.duration
+      if(video.paused) {
+        video.play()
+        setIsPlaying(true)
+      }
+    }
+
+    handleTimelineUpdate(e)
+  }
+
   return <div id='video-container' className='group w-[90%] max-w-[950px] flex justify-center m-2 relative'>
     {(!isFullscreen || (isFullscreen && fullscreenControls)) && <div
       className={`absolute group-hover:opacity-100 ${isPlaying ? "opacity-0" : "opacity-100"}
       bottom-0 left-0 right-0 text-white z-[100] transition-opacity duration-200 ease-in-out`}
     >
       <div id='video-player-controls-background' className='video-player-controls-background rounded'/>
+      <Timeline scrubbingTime={scrubbingTime} />
       <div className='flex items-center gap-3 p-4 justify-between'>
         <div className='flex flex-row gap-6 w-[250px]'>
           <PlayButton isPlaying={isPlaying} togglePlay={togglePlay} buttonHoverEffect={buttonHoverEffect} />
-          <VolumeButton volumeState={volumeState} toggleMute={toggleMute} changeVolume={changeVolume} buttonHoverEffect={buttonHoverEffect} />
+          <VolumeButton
+            volumeState={volumeState}
+            toggleMute={toggleMute}
+            changeVolume={changeVolume}
+            buttonHoverEffect={buttonHoverEffect}
+          />
           <Duration duration={videoDuration} currentTime={currentTime} />
         </div>
         <div className='flex flex-row items-center gap-6'>
@@ -199,7 +281,16 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
         </div>
       </div>
     </div>}
-    <video ref={playerRef} className='w-full rounded' src={videoUrl} onClick={togglePlay}/>
+    {isBuffering && <VideoBuffer />}
+    <video
+      preload='none'
+      onWaiting={() => setIsBuffering(true)}
+      onCanPlay={() => setIsBuffering(false)}
+      ref={playerRef}
+      className='w-full rounded'
+      src={videoUrl}
+      onClick={togglePlay}
+    />
   </div>
 };
 

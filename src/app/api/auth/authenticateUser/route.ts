@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 
 // constants
 import { primsaUserSafeDetails } from "@/constants/constants"
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
     if(!cookie?.value) return new NextResponse("No Id.", { status: 401 })
 
-    const user = await prisma.users.findFirst({
+    const user = await db.users.findFirst({
       where: {
         id: cookie?.value
       },

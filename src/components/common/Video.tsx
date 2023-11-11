@@ -13,7 +13,7 @@ const Video = ({ id, title, thumbnail, duration }: VideoProps) => {
   
   return (
     <button onClick={() => router.push(`/video/${id}`)}>
-      <img src={thumbnail} />
+      <img className='w-23 h-20' src={thumbnail} />
       <p>{ title }</p>
       <p>{ duration }</p>
     </button>

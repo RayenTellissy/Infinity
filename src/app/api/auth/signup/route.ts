@@ -9,7 +9,7 @@ import { sevenDaysInSeconds } from "@/constants/constants";
 import { generateAccessToken, generateRefreshToken } from "@/helpers/GenerateTokens";
 
 // db
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const user = await prisma.users.create({
+    const user = await db.users.create({
       data: {
         username,
         email,
