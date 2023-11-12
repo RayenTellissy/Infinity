@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from "next/image"
 import { useRouter } from 'next/navigation';
 
 type VideoProps = {
@@ -13,7 +14,7 @@ const Video = ({ id, title, thumbnail, duration }: VideoProps) => {
   
   return (
     <button onClick={() => router.push(`/video/${id}`)}>
-      <img className='w-23 h-20' src={thumbnail} />
+      <Image alt='video thumbnail' height={100} width={170} src={thumbnail} />
       <p>{ title }</p>
       <p>{ duration }</p>
     </button>

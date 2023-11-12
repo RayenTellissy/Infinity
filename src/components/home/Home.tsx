@@ -40,7 +40,7 @@ const Home = () => {
     <div className='h-full'>
       <ModeToggle />
       {videos.length !== 0 && videos.map((e: VideoType, i: Key) => {
-        return <Video id={e.id} title={e.title} thumbnail={e.thumbnail} duration={e.duration} />
+        return <Video key={i} id={e.id} title={e.title} thumbnail={e.thumbnail} duration={e.duration} />
       })}
     </div>
   );

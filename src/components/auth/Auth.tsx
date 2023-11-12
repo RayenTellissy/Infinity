@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { signIn, useSession, signOut } from 'next-auth/react';
 import { Context } from '@/components/context/Context';
 
 // ui components
@@ -31,6 +32,7 @@ import { usernameRegex, emailRegex, passwordRegex } from '@/constants/constants'
 
 const Auth = () => {
   const { setUser } = useContext(Context)
+  const { data: session } = useSession()
   const [username,setUsername] = useState("") // this state is shared between login and sign up for UX
   const [email,setEmail] = useState("")
   const [password,setPassword] = useState("") // this state is shared between login and sign up for UX
@@ -39,25 +41,39 @@ const Auth = () => {
   const router = useRouter()
 
   const handleLogin = async () => {
-    const response = await axios.post("/api/auth/login", {
-      username,
-      password
-    })
-    return response.data
+    try {
+      const response = await signIn("credentials", {
+        username,
+        password,
+        redirect: false
+      })
+      console.log(response)
+    }
+    catch(error) {
+      console.log(error)
+    }
+  }
+
+  const getSession = () => {
+    console.log(session?.user)
+  }
+
+  const logout = () => {
+    signOut()
   }
   
-  const { mutate: loginMutation } = useMutation({
-    mutationFn: handleLogin,
-    onSuccess: (response) => {
-      setUser(response)
-      router.push("/")
-    },
-    onError: (error: any) => {
-      const errorCode = error.response.data.code
-      if(errorCode === "NOEXIST") handleWrongUsername()
-      else if(errorCode === "INCPWD") handleWrongPassword()
-    }
-  })
+  // const { mutate: loginMutation } = useMutation({
+  //   mutationFn: handleLogin,
+  //   onSuccess: (response) => {
+  //     setUser(response)
+  //     router.push("/")
+  //   },
+  //   onError: (error: any) => {
+  //     const errorCode = error.response.data.code
+  //     if(errorCode === "NOEXIST") handleWrongUsername()
+  //     else if(errorCode === "INCPWD") handleWrongPassword()
+  //   }
+  // })
 
   const handleSignup = async () => {
     // form validation
@@ -112,6 +128,8 @@ const Auth = () => {
 
   return (
     <div className='h-screen w-screen flex justify-center items-center'>
+      <button onClick={getSession}>get session</button>
+      <button onClick={logout}>sign out</button>
       <Tabs value={tabValue} className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signin" onClick={() => setTabValue("signin")}>Sign In</TabsTrigger>
@@ -136,7 +154,7 @@ const Auth = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => loginMutation()}>Sign in!</Button>
+              <Button onClick={handleLogin}>Sign in!</Button>
             </CardFooter>
           </Card>
         </TabsContent>
