@@ -13,3 +13,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(error, { status: 500 })
   }
 }
+
+// revalidating to show new data
+export const revalidate = 1
