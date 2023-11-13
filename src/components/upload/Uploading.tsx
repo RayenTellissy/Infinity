@@ -25,9 +25,6 @@ import UploadFailed from './toasts/UploadFailed';
 // constants
 import { videoTags } from '@/constants/constants';
 
-// hooks
-import { useCon } from "@/components/context/Context"
-
 type UploadingProps = {
   uploadProgress: number
   finishedUploading: boolean
