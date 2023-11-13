@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 // context
 import { useCon } from '@/components/context/Context';
@@ -12,10 +13,11 @@ type ChannelProps = {
 }
 
 const Channel = ({ username }: ChannelProps) => {
-  const { user, setCurrentPage } = useCon()
+  const { setCurrentPage } = useCon()
+  const { data: session } = useSession()
 
   useEffect(() => {
-    if(isYourChannel(username, user.username as string)) {
+    if(isYourChannel(username, session?.user.username as string)) {
       setCurrentPage("Your Channel")
     }
   }, [])

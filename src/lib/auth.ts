@@ -1,4 +1,4 @@
-import type { NextAuthOptions } from "next-auth";
+import { getServerSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt"
 
@@ -27,17 +27,19 @@ export const options: NextAuthOptions = {
             username: credentials.username,
           }
         })
-        if(!user) return null
-
+        if(!user) {
+          throw new Error("INCUSR")
+        }
         const passwordMatch = await bcrypt.compare(credentials.password, user.password)
-        if(!passwordMatch) return null
+        if(!passwordMatch) {
+          throw new Error("INCPWD")
+        }
 
         return user
       },
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
   callbacks: {
     async jwt({ token, user }) {
       if(user) {
@@ -60,4 +62,9 @@ export const options: NextAuthOptions = {
       }
     }
   }
+}
+
+export const getSession = async () => {
+  const session = await getServerSession(options)
+  return session
 }

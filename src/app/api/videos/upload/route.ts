@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid"
 import { db } from "@/lib/db"
+import getSession from "@/lib/getSession";
 
 type UploadRequest = {
   title: string
@@ -14,6 +15,9 @@ type UploadRequest = {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getSession()
+    if(!session) return new NextResponse("UNAUTHORIZED", { status: 401 })
+
     const { title, description, thumbnail, duration, visibility, ownerId, url }: UploadRequest = await req.json()
 
     const video = await db.videos.create({

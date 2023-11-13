@@ -1,10 +1,10 @@
 "use client"
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { signIn, useSession, signOut } from 'next-auth/react';
-import { Context } from '@/components/context/Context';
+import { signIn } from 'next-auth/react';
+import type { SignInResponse } from 'next-auth/react';
 
 // ui components
 import { Button } from "@/components/ui/button"
@@ -27,53 +27,48 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from '@/components/ui/toast';
 
+// components
+import ButtonLoader from '../common/ButtonLoader';
+
 // constants
 import { usernameRegex, emailRegex, passwordRegex } from '@/constants/constants';
 
 const Auth = () => {
-  const { setUser } = useContext(Context)
-  const { data: session } = useSession()
   const [username,setUsername] = useState("") // this state is shared between login and sign up for UX
   const [email,setEmail] = useState("")
   const [password,setPassword] = useState("") // this state is shared between login and sign up for UX
   const [tabValue,setTabValue] = useState("signin")
-  const { toast } = useToast()
+  const [isLoading,setIsLoading] = useState(false)
   const router = useRouter()
+  const { toast } = useToast()
+
+  useEffect(() => {
+    document.addEventListener("keypress", handleKeyPress)
+    return () => document.removeEventListener("keypress", handleKeyPress)
+  }, [username, password])
 
   const handleLogin = async () => {
+    if(!username) return createToast("Please provide a username.")
+    if(!password) return createToast("Please provide a password.")
     try {
-      const response = await signIn("credentials", {
+      setIsLoading(true)
+      const response: SignInResponse | undefined = await signIn("credentials", {
         username,
         password,
         redirect: false
       })
-      console.log(response)
+      setIsLoading(false)
+      // if the user logged in succesfully, redirect him to main page
+      if(response?.ok) return router.push("/")
+      if(response?.error) {
+        if(response.error === "INCUSR") return handleWrongUsername()
+        if(response.error === "INCPWD") return handleWrongPassword()
+      }
     }
-    catch(error) {
+    catch(error: any) {
       console.log(error)
     }
   }
-
-  const getSession = () => {
-    console.log(session?.user)
-  }
-
-  const logout = () => {
-    signOut()
-  }
-  
-  // const { mutate: loginMutation } = useMutation({
-  //   mutationFn: handleLogin,
-  //   onSuccess: (response) => {
-  //     setUser(response)
-  //     router.push("/")
-  //   },
-  //   onError: (error: any) => {
-  //     const errorCode = error.response.data.code
-  //     if(errorCode === "NOEXIST") handleWrongUsername()
-  //     else if(errorCode === "INCPWD") handleWrongPassword()
-  //   }
-  // })
 
   const handleSignup = async () => {
     // form validation
@@ -91,12 +86,15 @@ const Auth = () => {
 
   const { mutate: signUpMutation } = useMutation({
     mutationFn: handleSignup,
-    onSuccess: (response) => {
-      setUser(response)
+    onSuccess: async () => {
+      await signIn("credentials", {
+        username,
+        password,
+        redirect: false
+      })
       router.push("/")
     },
     onError: (error: AxiosError) => {
-      setUser({ loggedIn: false })
       if(error.response?.data === "USEREXISTS") {
         return toast({
           description: `User with the username "${username}" already exists`,
@@ -122,14 +120,25 @@ const Auth = () => {
 
   const handleWrongPassword = () => {
     toast({
-      description: "Password Incorrect."
+      description: "Incorrect Password.",
+      duration: 3000
     })
+  }
+
+  const createToast = (description: string) => {
+    toast({
+      description
+    })
+  }
+
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if(e.key.toLowerCase() === "enter") {
+      handleLogin()
+    }
   }
 
   return (
     <div className='h-screen w-screen flex justify-center items-center'>
-      <button onClick={getSession}>get session</button>
-      <button onClick={logout}>sign out</button>
       <Tabs value={tabValue} className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signin" onClick={() => setTabValue("signin")}>Sign In</TabsTrigger>
@@ -154,7 +163,7 @@ const Auth = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleLogin}>Sign in!</Button>
+              <Button onClick={handleLogin}>{isLoading ? <ButtonLoader /> : "Sign in"}</Button>
             </CardFooter>
           </Card>
         </TabsContent>

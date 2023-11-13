@@ -21,15 +21,20 @@ const Home = () => {
   }, [])
 
   const fetchVideos = async () => {
-    const response = await axios.get("/api/videos/fetch", {
-      withCredentials: true
-    })
-    return response.data
+    try {
+      const response = await axios.get("/api/videos/fetch", {
+        withCredentials: true
+      })
+      return response.data
+    }
+    catch(error) {
+      console.log(error)
+    }
   }
 
   const { data: videos, isLoading } = useQuery({
     queryFn: fetchVideos,
-    queryKey: ["videos"],
+    queryKey: ["videos"]
   })
 
   if (isLoading) {
@@ -39,7 +44,7 @@ const Home = () => {
   return (
     <div className='h-full'>
       <ModeToggle />
-      {videos.length !== 0 && videos.map((e: VideoType, i: Key) => {
+      {videos && videos.length !== 0 && videos.map((e: VideoType, i: Key) => {
         return <Video key={i} id={e.id} title={e.title} thumbnail={e.thumbnail} duration={e.duration} />
       })}
     </div>
