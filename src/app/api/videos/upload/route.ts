@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid"
-import { db } from "@/lib/db"
+import db from "@/lib/db"
 import { getSession } from "@/lib/auth";
 
 type UploadRequest = {

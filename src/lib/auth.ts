@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt"
 
 // db
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 
 export const options: NextAuthOptions = {
   session: {

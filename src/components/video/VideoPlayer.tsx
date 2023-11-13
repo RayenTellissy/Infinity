@@ -192,7 +192,8 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   
   const handleSavedVolume = () => {
     const savedVolume = getItem()
-    changeVolume(savedVolume)
+    if(savedVolume) return changeVolume(savedVolume)
+    changeVolume(0.5)
   }
 
   const handleTotalDuration = () => {
@@ -287,7 +288,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
       onWaiting={() => setIsBuffering(true)}
       onCanPlay={() => setIsBuffering(false)}
       ref={playerRef}
-      className='w-full rounded'
+      className='w-full rounded aspect-video'
       src={videoUrl}
       onClick={togglePlay}
     />

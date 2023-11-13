@@ -18,7 +18,7 @@ const VolumeSlider = ({ changeVolume }: VolumeSliderProps) => {
     <Slider.Root
       onValueChange={(volume) => changeVolume(volume[0])}
       className="SliderRoot video-player-volume-slider"
-      defaultValue={[getItem()]}
+      defaultValue={[getItem() ? getItem() : 0.5]}
       max={1}
       step={0.03}
     >
