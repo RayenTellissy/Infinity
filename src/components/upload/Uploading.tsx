@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 // ui components
 import { Progress } from "@/components/ui/progress"
@@ -35,7 +36,7 @@ type UploadingProps = {
 }
 
 const Uploading = ({ uploadProgress, finishedUploading, videoDuration, videoUrl }: UploadingProps) => {
-  const { user } = useCon()
+  const { data: session } = useSession()
   const [title,setTitle] = useState("")
   const [description,setDescription] = useState("")
   const [thumbnailUrl,setThumbnailUrl] = useState<string | null>(null)
@@ -52,7 +53,7 @@ const Uploading = ({ uploadProgress, finishedUploading, videoDuration, videoUrl 
       thumbnail: thumbnailUrl,
       duration: videoDuration,
       visibility: visibility,
-      ownerId: user.id,
+      ownerId: session?.user.id,
       url: videoUrl
     })
     return response.data

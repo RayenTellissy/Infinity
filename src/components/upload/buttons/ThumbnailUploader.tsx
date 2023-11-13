@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import { v4 } from 'uuid';
+import Image from 'next/image';
 
 // storage instance
 import { storage } from '@/lib/firebase';
@@ -61,7 +62,7 @@ const ThumbnailUploader = ({ thumbnailUrl, setThumbnailUrl }: ThumbnailUploaderP
 
   if(thumbnailUrl) {
     return <div className='h-1/2 flex items-center justify-center'>
-      <img className='h-[300px] w-[533px] rounded' src={thumbnailUrl} />
+      <Image alt='thumbnail prewview' className='h-[300px] w-[533px] rounded' src={thumbnailUrl} />
     </div>
   }
 };
