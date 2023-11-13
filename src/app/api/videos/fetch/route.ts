@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 
-const db = new PrismaClient()
+// db
+import db from "@/lib/db";
 
 export async function GET(req: NextRequest) {
   try {
-    const videos = await db.videos.findMany()
+    const videos = await db.videos.findMany({})
 
     return NextResponse.json(videos, { status: 200 })
   }
