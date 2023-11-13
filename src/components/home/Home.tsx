@@ -21,7 +21,6 @@ const Home = () => {
 
   const fetchVideos = async () => {
     try {
-      console.log("fetching videos")
       const response = await axios.get("/api/videos/fetch", {
         withCredentials: true
       })

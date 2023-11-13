@@ -23,7 +23,7 @@ var timeoutId: NodeJS.Timeout
 var isScrubbing = false
 
 const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
-  const [isPlaying,setIsPlaying] = useState(false)
+  const [isPlaying,setIsPlaying] = useState(true)
   const [isFullscreen,setIsFullscreen] = useState(false)
   const [fullscreenControls,setFullscreenControls] = useState(false)
   const [inMini,setInMini] = useState(false)
@@ -39,10 +39,6 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   const buttonHoverEffect = "opacity-80 hover:opacity-100 transition-opacity duration-200 ease-in-out"
   const { getItem, setItem } = useLocalStorage("volume")
   const timelineContainer = document.getElementById("timeline-container")
-
-  useEffect(() => {
-    handleAutoplay()
-  }, [])
   
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown)
@@ -144,16 +140,6 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
     }
   }
 
-  // a workaround function, because browsers dont support autoplay with unmuted playback
-  const handleAutoplay = () => {
-    if(playerRef.current) {
-      playerRef.current.muted = true
-      playerRef.current.play()
-      setIsPlaying(true)
-      playerRef.current.muted = false
-    }
-  }
-
   // a function to handle showing and hiding player controls when in fullscreen
   const handleMouseMove = async () => {
     if(!isFullscreen) return
@@ -225,8 +211,9 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
 
   const handleTimelineUpdate = (e: MouseEvent) => {
     const rect = timelineContainer?.getBoundingClientRect()
-    if(!rect || !video) return
+    if(!rect || !video || !video.duration) return
     const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width
+    console.log(percent, video.duration)
     setScrubbingTime(percent * video.duration)
     timelineContainer?.style.setProperty("--preview-position", String(percent))
 
@@ -236,9 +223,9 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
     }
   }
 
-  const toggleScrubbing = (e: MouseEvent) => {
+  const toggleScrubbing = async (e: MouseEvent) => {
     const rect = timelineContainer?.getBoundingClientRect()
-    if(!rect || !video) return
+    if(!rect || !video || !video.duration) return
     const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width
     isScrubbing = (e.buttons & 1) === 1
     
@@ -249,7 +236,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
     else {
       video.currentTime = percent * video.duration
       if(video.paused) {
-        video.play()
+        await video.play()
         setIsPlaying(true)
       }
     }
@@ -284,11 +271,12 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
     </div>}
     {isBuffering && <VideoBuffer />}
     <video
+      autoPlay
       preload='none'
       onWaiting={() => setIsBuffering(true)}
       onCanPlay={() => setIsBuffering(false)}
       ref={playerRef}
-      className='w-full rounded aspect-video'
+      className='w-full rounded aspect-video bg-black'
       src={videoUrl}
       onClick={togglePlay}
     />
