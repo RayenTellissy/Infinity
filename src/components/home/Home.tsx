@@ -19,7 +19,7 @@ const Home = () => {
 
   const fetchVideos = async () => {
     try {
-      const response = await axios.get("/api/videos/fetchAll", {
+      const response = await axios.get("/api/videos/fetch", {
         withCredentials: true
       })
       return response.data
