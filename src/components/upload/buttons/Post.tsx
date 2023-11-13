@@ -4,6 +4,9 @@ import React from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from '@/components/ui/button';
 
+// components
+import ButtonLoader from '@/components/common/ButtonLoader';
+
 // constants
 import { purpleButtonStyling } from '@/constants/constants';
 
@@ -11,9 +14,10 @@ type PostProps = {
   error: string | null
   callback: () => void
   disabled: boolean
+  isPending: boolean
 }
 
-const Post = ({ error, callback, disabled }: PostProps) => {
+const Post = ({ error, callback, disabled, isPending }: PostProps) => {
 
   const handleSubmit = () => {
     if(disabled) return
@@ -29,7 +33,7 @@ const Post = ({ error, callback, disabled }: PostProps) => {
             disabled={error !== null}
             onClick={handleSubmit}
           >
-            Post
+            {isPending ? <ButtonLoader /> : "Post"}
           </Button>
         </TooltipTrigger>
         {error && <TooltipContent>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 
@@ -42,6 +42,7 @@ const Uploading = ({ uploadProgress, finishedUploading, videoDuration, videoUrl 
   const [visibility,setVisibility] = useState<"public" | "private">("public")
   const { toast } = useToast()
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   const uploadVideo = async () => {
     const response = await axios.post("/api/videos/upload", {
@@ -59,6 +60,7 @@ const Uploading = ({ uploadProgress, finishedUploading, videoDuration, videoUrl 
   const { mutate: postVideo, isPending, isSuccess } = useMutation({
     mutationFn: uploadVideo,
     onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ["videos"] })
       toast({ action: <UploadSuccess />, duration: 3000 })
       router.push(`/video/${response.id}`)
     },
@@ -142,7 +144,12 @@ const Uploading = ({ uploadProgress, finishedUploading, videoDuration, videoUrl 
           </div>
           <div className='flex flex-row justify-end p-4'>
             <Button variant="link" onClick={cancelUpload}>Cancel</Button>
-            <Post error={returnFormError()} callback={postVideo} disabled={isPending || isSuccess}/>
+            <Post
+              error={returnFormError()}
+              callback={postVideo}
+              disabled={isPending || isSuccess}
+              isPending={isPending}
+            />
           </div>
         </div>
       </div>

@@ -13,5 +13,3 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(error, { status: 500 })
   }
 }
-
-export const revalidate = 1
