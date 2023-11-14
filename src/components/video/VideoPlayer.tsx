@@ -188,7 +188,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   }
 
   const handleTimeUpdate = () => {
-    if(!video) return
+    if(!video || isNaN(video.duration)) return
     setCurrentTime(video.currentTime)
     // updating the progress for timeline
     timelineContainer?.style.setProperty("--progress-position", `${video.currentTime / video.duration}`)
@@ -213,7 +213,6 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
     const rect = timelineContainer?.getBoundingClientRect()
     if(!rect || !video || !video.duration) return
     const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width
-    console.log(percent, video.duration)
     setScrubbingTime(percent * video.duration)
     timelineContainer?.style.setProperty("--preview-position", String(percent))
 

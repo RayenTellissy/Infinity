@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from "next/link"
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ import { Separator } from '@/components/ui/separator';
 // components
 import UserAvatar from '@/components/common/UserAvatar';
 import IconButton from '@/components/common/IconButton';
+import Shortcuts from './Shortcuts';
 
 type AvatarPopoverProps = {
   username: string
@@ -22,16 +23,16 @@ type AvatarPopoverProps = {
 
 const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
   const { theme, setTheme } = useTheme()
+  const [modalOpen,setModalOpen] = useState(false)
   const router = useRouter()
 
   const handleTheme = () => {
-    console.log(theme)
     if(theme === "light") return setTheme("dark")
     setTheme("light")
   }
 
   const openShortcuts = () => {
-    //TODO
+    setModalOpen(true)
   }
 
   return (
@@ -55,6 +56,7 @@ const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
               text={`Theme: Switch to ${theme === "light" ? "Dark" : "Light"} mode`}
               callback={handleTheme}
             />
+            <Shortcuts isOpen={modalOpen} setIsOpen={setModalOpen} />
             <IconButton
               icon={<Keyboard />}
               text='Keyboard shortcuts'

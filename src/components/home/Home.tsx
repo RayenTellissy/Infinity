@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCon } from "@/components/context/Context"
 
 // components
-import Video from "@/components/common/Video"
+import Video from './Videos/Video';
 
 // types
 import { VideoType } from '@/types/types';
@@ -41,7 +41,7 @@ const Home = () => {
   }
 
   return (
-    <div className='h-full'>
+    <div className='flex-1 w-full grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]'>
       {videos && videos.length !== 0 && videos.map((e: VideoType, i: Key) => {
         return <Video key={i} id={e.id} title={e.title} thumbnail={e.thumbnail} duration={e.duration} />
       })}
