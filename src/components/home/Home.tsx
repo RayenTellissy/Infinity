@@ -17,6 +17,7 @@ const Home = () => {
 
   useEffect(() => {
     setCurrentPage("Home")
+    return () => setCurrentPage("")
   }, [])
 
   const fetchVideos = async () => {
@@ -41,9 +42,20 @@ const Home = () => {
   }
 
   return (
-    <div className='flex-1 w-full grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]'>
+    <div className='flex-1 w-full grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] p-6'>
       {videos && videos.length !== 0 && videos.map((e: VideoType, i: Key) => {
-        return <Video key={i} id={e.id} title={e.title} thumbnail={e.thumbnail} duration={e.duration} />
+        return <Video
+          key={i}
+          id={e.id}
+          title={e.title}
+          thumbnail={e.thumbnail}
+          duration={e.duration}
+          videoUrl={e.url}
+          ownerUsername={e.owner.username as string}
+          ownerImage={e.owner.image as string}
+          views={e.VideoViews.length}
+          created_at={e.created_at}
+        />
       })}
     </div>
   );

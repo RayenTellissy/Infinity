@@ -5,10 +5,19 @@ export type VideoType = {
   thumbnail: string
   duration: number
   visibility: "public" | "private"
-  owner: object
+  owner: User
   ownerId: string
   url: string
   created_at: Date
   VideoLikes: []
   VideoComments: []
+  VideoViews: []
+}
+
+export type User = {
+  id?: string
+  username?: string
+  email?: string
+  image?: string
+  created_at?: string
 }

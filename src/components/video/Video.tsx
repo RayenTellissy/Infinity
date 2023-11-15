@@ -1,7 +1,8 @@
 "use client"
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
 // components
 import VideoPlayer from './VideoPlayer';
@@ -15,9 +16,11 @@ type VideoProps = {
 
 const Video = ({ videoId }: VideoProps) => {
   const { setCurrentPage } = useCon()
+  const { data: session } = useSession()
 
   useEffect(() => {
     setCurrentPage("video")
+    mutateView()
   }, [])
   
   const fetchVideo = async () => {
@@ -28,6 +31,19 @@ const Video = ({ videoId }: VideoProps) => {
   const { data: video, isLoading } = useQuery({
     queryFn: fetchVideo,
     queryKey: ["video"]
+  })
+
+  const viewVideo = async () => {
+    if(!session) return
+    const response = await axios.post("/api/videos/view", {
+      userId: session.user.id,
+      videoId
+    })
+    return response.data
+  }
+
+  const { mutate: mutateView } = useMutation({
+    mutationFn: viewVideo
   })
 
   if(isLoading) {

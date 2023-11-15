@@ -21,7 +21,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className='flex flex-col w-56 p-3'>
+    <div className='w-56 flex flex-col p-3'>
       <SidebarButton text="Home" icon={<Home />} callback={() => router.push("/")}/>
       <SidebarButton text="Your Channel" icon={<User2 />} callback={handleMyChannel}/>
       <SidebarSeperator />

@@ -17,6 +17,7 @@ model Users {
   Videos        Videos[]
   VideoLikes    VideoLikes[]
   VideoComments VideoComments[]
+  VideoViews    VideoViews[]
 }
 
 model Videos {
@@ -30,8 +31,17 @@ model Videos {
   ownerId       String
   url           String
   created_at    DateTime        @default(now())
+  VideoViews    VideoViews[]
   VideoLikes    VideoLikes[]
   VideoComments VideoComments[]
+}
+
+model VideoViews {
+  id       String @id @default(cuid())
+  viewer   Users  @relation(fields: [viewerId], references: [id])
+  viewerId String
+  video    Videos @relation(fields: [videoId], references: [id])
+  videoId  String
 }
 
 model VideoLikes {
