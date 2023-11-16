@@ -27,6 +27,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   const [isFullscreen,setIsFullscreen] = useState(false)
   const [fullscreenControls,setFullscreenControls] = useState(false)
   const [inMini,setInMini] = useState(false)
+  const [volume,setVolume] = useState(0.5)
   const [volumeState,setVolumeState] = useState<"muted" | "low" | "medium" | "high">("high")
   const [videoDuration,setVideoDuration] = useState<number | null>(null)
   const [currentTime,setCurrentTime] = useState<number | null>(null)
@@ -41,13 +42,13 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   const timelineContainer = document.getElementById("timeline-container")
   
   useEffect(() => {
+    handleSavedVolume()
     window.addEventListener("keydown", handleKeyDown)
     video?.addEventListener("enterpictureinpicture", () => setInMini(true))
     video?.addEventListener("leavepictureinpicture", () => setInMini(false))
     video?.addEventListener("volumechange", handleVolumeChange)
     video?.addEventListener("loadeddata", () => {
       handleTotalDuration()
-      handleSavedVolume()
     })
     video?.addEventListener("timeupdate", handleTimeUpdate)
     timelineContainer?.addEventListener("mousemove", handleTimelineUpdate)
@@ -65,7 +66,6 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
       video?.removeEventListener("volumechange", handleVolumeChange)
       video?.removeEventListener("loadeddata", () => {
         handleTotalDuration()
-        handleSavedVolume()
       })
       video?.removeEventListener("timeupdate", handleTimeUpdate)
       timelineContainer?.removeEventListener("mousemove", handleTimelineUpdate)
@@ -115,28 +115,37 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   
   const handleKeyDown = (e: KeyboardEvent) => {
     // if we are tabbed into an input element, return
-    const activeElement = document.activeElement?.tagName.toUpperCase()
+    const activeElement = document.activeElement?.tagName.toLowerCase()
     if(activeElement === "INPUT") return
 
     // when space bar is pressed toggle play
     if(e.key === " ") {
-      if(activeElement === "BUTTON") return
+      if(activeElement === "button") return
       togglePlay()
     }
-    if(e.key.toLowerCase() === "f") {
+    else if(e.key.toLowerCase() === "f") {
       toggleFullscreen()
     }
-    if(e.key.toLowerCase() === "i") {
+    else if(e.key.toLowerCase() === "i") {
       toggleMiniPlayer()
     }
-    if(e.key.toLowerCase() === "i") {
+    else if(e.key.toLowerCase() === "i") {
       toggleMute()
     }
-    if(e.key.toLowerCase() === "arrowright") {
+    else if(e.key.toLowerCase() === "arrowright") {
       skip(5)
     }
-    if(e.key.toLowerCase() === "arrowleft") {
+    else if(e.key.toLowerCase() === "arrowleft") {
       skip(-5)
+    }
+    else if(e.key.toLowerCase() === "m") {
+      toggleMute()
+    }
+    else if(e.key.toLowerCase() === "arrowdown") {
+      decreaseVolume()
+    }
+    else if(e.key.toLowerCase() === "arrowup") {
+      increaseVolume()
     }
   }
 
@@ -155,6 +164,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   const toggleMute = () => {
     if(!video) return
     video.muted = !video.muted
+    setVolume(video.muted ? 0 : video.volume)
   }
 
   // volume state management used to change the volume icon
@@ -173,13 +183,15 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
       video.muted = false
     }
     video.volume = volume
+    setVolume(volume)
     setItem(volume)
   }
   
   const handleSavedVolume = () => {
     const savedVolume = getItem()
-    if(savedVolume) return changeVolume(savedVolume)
-    changeVolume(0.5)
+    if(savedVolume) {
+      changeVolume(savedVolume)
+    }
   }
 
   const handleTotalDuration = () => {
@@ -243,7 +255,21 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
     handleTimelineUpdate(e)
   }
 
-  return <div id='video-container' className='group w-[90%] max-w-[950px] flex justify-center m-2 relative'>
+  const increaseVolume = () => {
+    if(!video || video.volume === 1) return
+    if(video.volume > 0.95) return video.volume = 1
+    video.volume += 0.05
+    setVolume(video.volume + 0.05)
+  }
+
+  const decreaseVolume = () => {
+    if(!video || video.volume === 0) return
+    if(video.volume < 0.05) return video.volume = 0
+    video.volume -= 0.05
+    setVolume(video.volume - 0.05)
+  }
+
+  return <div id='video-container' className='group w-[90%] max-w-[950px] flex justify-center relative'>
     {(!isFullscreen || (isFullscreen && fullscreenControls)) && <div
       className={`absolute group-hover:opacity-100 ${isPlaying ? "opacity-0" : "opacity-100"}
       bottom-0 left-0 right-0 text-white z-[100] transition-opacity duration-200 ease-in-out`}
@@ -254,6 +280,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
         <div className='flex flex-row gap-6 w-[250px]'>
           <PlayButton isPlaying={isPlaying} togglePlay={togglePlay} buttonHoverEffect={buttonHoverEffect} />
           <VolumeButton
+            volume={volume}
             volumeState={volumeState}
             toggleMute={toggleMute}
             changeVolume={changeVolume}

@@ -53,7 +53,7 @@ const Home = () => {
           videoUrl={e.url}
           ownerUsername={e.owner.username as string}
           ownerImage={e.owner.image as string}
-          views={e.VideoViews.length}
+          views={e.views.length}
           created_at={e.created_at}
         />
       })}

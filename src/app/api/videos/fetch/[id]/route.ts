@@ -8,10 +8,30 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const video = await db.videos.findFirst({
       where: {
         id: params.id
+      },
+      select: {
+        title: true,
+        description: true,
+        url: true,
+        owner: true,
+        created_at: true,
+        comments: true
       }
     })
 
-    return NextResponse.json(video, { status: 200 })
+    const views = await db.videoViews.count({
+      where: {
+        videoId: params.id
+      }
+    })
+
+    const likes = await db.videoLikes.count({
+      where: {
+        videoId: params.id
+      }
+    })
+
+    return NextResponse.json({ ...video, views, likes }, { status: 200 })
   }
   catch(error){
     return NextResponse.json("Internal Error", { status: 500 })

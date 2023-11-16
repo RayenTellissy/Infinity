@@ -7,13 +7,14 @@ import { VolumeX, Volume, Volume1, Volume2 } from 'lucide-react';
 import VolumeSlider from './VolumeSlider/VolumeSlider';
 
 type VolumeButtonProps = {
+  volume: number
   volumeState: "muted" | "low" | "medium" | "high"
   toggleMute: () => void
   changeVolume: (volume: number) => void
   buttonHoverEffect: string
 }
 
-const VolumeButton = ({ volumeState, toggleMute, changeVolume, buttonHoverEffect }: VolumeButtonProps) => {
+const VolumeButton = ({ volume, volumeState, toggleMute, changeVolume, buttonHoverEffect }: VolumeButtonProps) => {
 
   const volumeDisplay = {
     muted: <VolumeX size={40} />,
@@ -27,7 +28,7 @@ const VolumeButton = ({ volumeState, toggleMute, changeVolume, buttonHoverEffect
       <button onClick={toggleMute}>
         {volumeDisplay[volumeState]}
       </button>
-      <VolumeSlider changeVolume={changeVolume} />
+      <VolumeSlider volume={volume} changeVolume={changeVolume} />
     </div>
   );
 };

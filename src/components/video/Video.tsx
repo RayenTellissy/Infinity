@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 
 // components
 import VideoPlayer from './VideoPlayer';
+import Title from './title/Title';
 
 // hooks
 import { useCon } from '../context/Context';
@@ -25,12 +26,13 @@ const Video = ({ videoId }: VideoProps) => {
   
   const fetchVideo = async () => {
     const response = await axios.get(`/api/videos/fetch/${videoId}`)
+    console.log(response.data)
     return response.data
   }
   
   const { data: video, isLoading } = useQuery({
     queryFn: fetchVideo,
-    queryKey: ["video"]
+    queryKey: ["video"],
   })
 
   const viewVideo = async () => {
@@ -51,8 +53,10 @@ const Video = ({ videoId }: VideoProps) => {
   }
 
   return (
-    <div className='flex-1'>
+    <div className='flex-1 flex flex-col p-2 gap-3'>
       <VideoPlayer videoUrl={video.url}/>
+      <Title title={video.title} />
+      
     </div>
   );
 };

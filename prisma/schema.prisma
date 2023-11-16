@@ -18,22 +18,32 @@ model Users {
   VideoLikes    VideoLikes[]
   VideoComments VideoComments[]
   VideoViews    VideoViews[]
+  subscribedTo  Subscribers[]   @relation("subscribedTo")
+  Subscribers   Subscribers[]   @relation("subscribers")
+}
+
+model Subscribers {
+  id           String @id @default(cuid())
+  subscriber   Users  @relation("subscribedTo", fields: [subscriberId], references: [id])
+  subscriberId String
+  subscribed   Users  @relation("subscribers", fields: [subscribedId], references: [id])
+  subscribedId String
 }
 
 model Videos {
-  id            String          @id @default(cuid())
-  title         String
-  description   String?
-  thumbnail     String
-  duration      Int
-  visibility    Visibility
-  owner         Users           @relation(fields: [ownerId], references: [id])
-  ownerId       String
-  url           String
-  created_at    DateTime        @default(now())
-  VideoViews    VideoViews[]
-  VideoLikes    VideoLikes[]
-  VideoComments VideoComments[]
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  thumbnail   String
+  duration    Int
+  visibility  Visibility
+  owner       Users           @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  url         String
+  created_at  DateTime        @default(now())
+  views       VideoViews[]
+  likes       VideoLikes[]
+  comments    VideoComments[]
 }
 
 model VideoViews {
@@ -45,11 +55,11 @@ model VideoViews {
 }
 
 model VideoLikes {
-  id       String @id @default(cuid())
-  user     Users  @relation(fields: [userId], references: [id])
-  userId   String
-  video    Videos @relation(fields: [videosId], references: [id])
-  videosId String
+  id      String @id @default(cuid())
+  user    Users  @relation(fields: [userId], references: [id])
+  userId  String
+  video   Videos @relation(fields: [videoId], references: [id])
+  videoId String
 }
 
 model VideoComments {

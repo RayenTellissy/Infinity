@@ -9,9 +9,9 @@ export type VideoType = {
   ownerId: string
   url: string
   created_at: Date
-  VideoLikes: []
-  VideoComments: []
-  VideoViews: []
+  likes: []
+  comments: []
+  views: []
 }
 
 export type User = {

@@ -4,21 +4,18 @@ import * as Slider from "@radix-ui/react-slider"
 // styles
 import "./VolumeSlider.css"
 
-// hooks
-import useLocalStorage from '@/hooks/useLocalStorage';
-
 type VolumeSliderProps = {
+  volume: number
   changeVolume: (volume: number) => void
 }
 
-const VolumeSlider = ({ changeVolume }: VolumeSliderProps) => {
-  const { getItem } = useLocalStorage("volume") // saved volume as a default value for slider
+const VolumeSlider = ({ volume, changeVolume }: VolumeSliderProps) => {
 
   return (
     <Slider.Root
+      value={[volume]}
       onValueChange={(volume) => changeVolume(volume[0])}
       className="SliderRoot video-player-volume-slider"
-      defaultValue={[getItem() ? getItem() : 0.5]}
       max={1}
       step={0.03}
     >

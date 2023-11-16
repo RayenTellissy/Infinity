@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import formatDuration from '@/helpers/formatDuration';
 import returnProgressValue from '@/helpers/returnProgressValue';
 import formatViews from '@/helpers/formatViews';
+import formatCreatedAt from '@/helpers/formatCreatedAt';
 
 // ui components
 import { Progress } from '@/components/ui/progress';
@@ -13,7 +14,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 // components
 import UserAvatar from '@/components/common/UserAvatar';
-import formatCreatedAt from '@/helpers/formatCreatedAt';
 
 type VideoProps = {
   id: string
@@ -66,19 +66,20 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
   }
 
   return (
-    <button
-      className='flex flex-col gap-2'
+    <div
+      className='flex flex-col gap-2 aspect-video cursor-pointer'
       onMouseEnter={() => handlePlaying(true)}
       onMouseLeave={() => handlePlaying(false)}
       onClick={() => router.push(`/video/${id}`)}
     >
-      <div className='relative'>
+      <div className='relative h-full w-full'>
         <Image
           alt='video thumbnail'
           height={152}
           width={270}
           className={`w-full h-full object-fill aspect-video ${isPlaying ? "rounded-none opacity-0" : "rounded-lg"} transition-opacity duration-200`}
           src={thumbnail}
+          placeholder='empty'
         />
         <div className='absolute bottom-1 right-1 bg-black bg-opacity-80 text-sm text-white px-0.5 rounded'>
           {formatDuration(duration)}
@@ -89,8 +90,8 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
             muted
             playsInline
             src={videoUrl}
-            className={`w-full h-full object-scale-down absolute inset-0 transition-opacity duration-200
-            ${isPlaying ? "opacity-100" : "opacity-0"} aspect-video`}
+            className={`w-full h-full object-scale-down absolute inset-0
+            ${isPlaying ? "opacity-100" : "opacity-0"} transition-opacity duration-200`}
           />
           <Progress
             hidden={!isPlaying}
@@ -99,7 +100,7 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
             className='h-1 absolute bottom-0 bg-gray-600 bg-opacity-60 rounded-none'
           />
         </div>
-        <div className='absolute flex flex-row gap-2'>
+        <div className='flex flex-row gap-2'>
           <div className='py-2'>
             <UserAvatar image={ownerImage} />
           </div>
@@ -125,7 +126,7 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
           </div>
         </div>
       </div>
-    </button>
+    </div>
   );
 };
 

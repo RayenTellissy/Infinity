@@ -6,8 +6,8 @@ import { getSession } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getSession()
-    if(!session) return NextResponse.json("UNAUTHORIZED", { status: 401 })
+    // const session = await getSession()
+    // if(!session) return NextResponse.json("UNAUTHORIZED", { status: 401 })
 
     const { userId, videoId } = await req.json()
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    if(alreadyViewed) return NextResponse.json("Already viewed.", { status: 304 })
+    if(alreadyViewed) return NextResponse.json("Already viewed.", { status: 200 })
 
     await db.videoViews.create({
       data: {

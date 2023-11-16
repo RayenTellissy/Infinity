@@ -11,7 +11,6 @@ import { Upload, UserCircle2 } from 'lucide-react';
 
 // components
 import AuthLoading from './AuthLoading';
-import UserAvatar from '@/components/common/UserAvatar';
 import AvatarPopover from './AvatarPopover';
 
 const RightElement = () => {

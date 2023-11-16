@@ -56,6 +56,16 @@ const Shortcuts = ({ isOpen, setIsOpen }: ShortcutsProps) => {
           </div>
           <Separator />
           <div className='flex flex-row justify-between'>
+            <p className='dark:text-gray-400 text-gray-600'>Increase volume</p>
+            <p className='dark:text-white text-black'>↑</p>
+          </div>
+          <Separator />
+          <div className='flex flex-row justify-between'>
+            <p className='dark:text-gray-400 text-gray-600'>Decrease volume</p>
+            <p className='dark:text-white text-black'>↓</p>
+          </div>
+          <Separator />
+          <div className='flex flex-row justify-between'>
             <p className='dark:text-gray-400 text-gray-600'>Toggle fullscreen</p>
             <p className='dark:text-white text-black'>f</p>
           </div>

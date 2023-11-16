@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     const videos = await db.videos.findMany({
       include: {
         owner: true,
-        VideoViews: true
+        views: true
       }
     })
 
