@@ -8,9 +8,23 @@ export async function POST(req: NextRequest) {
   try {
     const { username, email, password } = await req.json()
 
+    const userExists = await db.users.findFirst({
+      where: {
+        OR: [
+          { username },
+          { email }
+        ]
+      }
+    })
+
+    if(userExists) {
+      if(userExists.username === username) return new NextResponse("USEREXISTS", { status: 409 })
+      else if(userExists.email === email) return new NextResponse("EMAILEXISTS", { status: 409 })
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const user = await db.users.create({
+    await db.users.create({
       data: {
         username,
         email,
@@ -18,16 +32,9 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    return NextResponse.json({
-      loggedIn: true,
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      image: user.image
-    }, { status: 200 })
+    return new NextResponse("Signed up!", { status: 200 })
   }
   catch(error: any){
-    if(error.code === "P2002") return new NextResponse("USEREXISTS", { status: 400 })
     return new NextResponse("Internal Error", { status: 500 })
   }
 }

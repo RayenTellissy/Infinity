@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCon } from "@/components/context/Context"
 
 // components
-import Video from './Videos/Video';
+import Video from './Video';
 
 // types
 import { VideoType } from '@/types/types';

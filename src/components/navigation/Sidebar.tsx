@@ -16,19 +16,19 @@ const Sidebar = () => {
   const { data: session, status } = useSession()
 
   const handleMyChannel = () => {
-    if(status === "unauthenticated") return router.push("/auth")
-    router.push(`/channel/${session?.user.username}`)
+    if(status === "unauthenticated") return "/auth"
+    return `/channel/${session?.user.username}`
   }
 
   return (
     <div className='w-56 flex flex-col p-3'>
-      <SidebarButton text="Home" icon={<Home />} callback={() => router.push("/")}/>
-      <SidebarButton text="Your Channel" icon={<User2 />} callback={handleMyChannel}/>
+      <SidebarButton text="Home" icon={<Home />} route="/"/>
+      <SidebarButton text="Your Channel" icon={<User2 />} route={handleMyChannel()}/>
       <SidebarSeperator />
-      <SidebarButton text="Dashboard" icon={<LayoutDashboard />} callback={() => router.push(`/dashboard`)}/>
-      <SidebarButton text="Subscriptions" icon={<Rss />} callback={() => router.push("/subscriptions")}/>
-      <SidebarButton text="History" icon={<History />} callback={() => router.push("/history")}/>
-      <SidebarButton text="Watch later" icon={<Clock4 />} callback={() => router.push("/watchlater")}/>
+      <SidebarButton text="Dashboard" icon={<LayoutDashboard />} route="/dashboard"/>
+      <SidebarButton text="Subscriptions" icon={<Rss />} route="/subscriptions"/>
+      <SidebarButton text="History" icon={<History />} route='/history'/>
+      <SidebarButton text="Watch later" icon={<Clock4 />} route='/watchlater'/>
       <SidebarSeperator />
       <SidebarSubscriptions />
     </div>

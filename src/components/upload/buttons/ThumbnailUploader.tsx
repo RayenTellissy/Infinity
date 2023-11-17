@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import { v4 } from 'uuid';
+import { nanoid } from 'nanoid';
 import Image from 'next/image';
 
 // storage instance
@@ -21,7 +21,7 @@ const ThumbnailUploader = ({ thumbnailUrl, setThumbnailUrl }: ThumbnailUploaderP
   const uploadThumbnail = async (thumbnail: File) => {
     if(!thumbnail) return
     setUploadingThumbnail(true)
-    const storageRef = ref(storage, `thumbnails/${v4()}`)
+    const storageRef = ref(storage, `thumbnails/${nanoid()}`)
     await uploadBytes(storageRef, thumbnail)
 
     const url = await getDownloadURL(storageRef)

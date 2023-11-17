@@ -41,12 +41,19 @@ export const options: NextAuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+
+      // image update received from the client
+      if(trigger === "update" && session?.image) {
+        token.image = session.image
+      }
+
       if(user) {
         return {
           ...token,
           id: user.id,
           username: user.username,
+          image: user.image
         }
       }
       return token
@@ -56,8 +63,10 @@ export const options: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
-          id: token.id,
-          username: token.username,
+          id: token.id as string,
+          username: token.username as string,
+          image: token.image as string,
+          email: token.email as string
         }
       }
     }

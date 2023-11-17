@@ -14,12 +14,12 @@ model Users {
   password      String
   image         String?
   created_at    DateTime        @default(now())
-  Videos        Videos[]
-  VideoLikes    VideoLikes[]
-  VideoComments VideoComments[]
-  VideoViews    VideoViews[]
+  videos        Videos[]
+  videoLikes    VideoLikes[]
+  videoComments VideoComments[]
+  videoViews    VideoViews[]
   subscribedTo  Subscribers[]   @relation("subscribedTo")
-  Subscribers   Subscribers[]   @relation("subscribers")
+  subscribers   Subscribers[]   @relation("subscribers")
 }
 
 model Subscribers {
@@ -28,6 +28,8 @@ model Subscribers {
   subscriberId String
   subscribed   Users  @relation("subscribers", fields: [subscribedId], references: [id])
   subscribedId String
+
+  @@unique([subscriberId, subscribedId])
 }
 
 model Videos {

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Link from "next/link"
 import { useTheme } from 'next-themes';
-import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
 // icons
@@ -24,7 +23,6 @@ type AvatarPopoverProps = {
 const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
   const { theme, setTheme } = useTheme()
   const [modalOpen,setModalOpen] = useState(false)
-  const router = useRouter()
 
   const handleTheme = () => {
     if(theme === "light") return setTheme("dark")
@@ -42,10 +40,12 @@ const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
       </PopoverTrigger>
       <PopoverContent align='end' side='right' className='m-2 p-0'>
         <div className='flex flex-col'>
-          <div className='flex flex-row gap-2 p-3'>
-            <UserAvatar image={image} />
+          <div className='flex flex-row gap-3 p-3'>
+            <div>
+              <UserAvatar image={image} />
+            </div>
             <div className='flex flex-col gap-2'>
-              <p>{ username }</p>
+              <p className='text-lg font-medium'>{ username }</p>
               <Link className="text-sm text-[#007bff]" href={`/channel/${username}`}>View your channel</Link>
             </div>
           </div>
@@ -65,7 +65,7 @@ const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
             <IconButton
               icon={<UserCog2 />}
               text='Account settings'
-              callback={() => router.push("/settings")}
+              callback={() => window.location.href = "/settings"}
             />
             <IconButton
               icon={<LogOut />}

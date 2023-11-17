@@ -101,6 +101,12 @@ const Auth = () => {
           duration: 3000
         })
       }
+      else if(error.response?.data === "EMAILEXISTS") {
+        return toast({
+          description: `User with the email "${email}" already exists`,
+          duration: 3000
+        })
+      }
       toast({
         variant: "destructive",
         description: error.message,

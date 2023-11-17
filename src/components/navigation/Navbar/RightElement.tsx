@@ -28,10 +28,10 @@ const RightElement = () => {
 
   return (
     <div className='flex flex-row items-center gap-3 mr-4'>
-      <Button className='w-10 h-10 p-0 rounded-full' variant="ghost" onClick={() => router.push("/upload")}>
+      <Button className='w-10 h-10 p-0 rounded-full' variant="ghost" onClick={() => window.location.href = "/upload"}>
         <Upload />
       </Button>
-      {!isAuthenticated() ? <Button className='p-3 flex gap-1' variant="icon" onClick={() => router.push("/auth")}>
+      {!isAuthenticated() ? <Button className='p-3 flex gap-1' variant="icon" onClick={() => window.location.href = "/auth"}>
         <UserCircle2 />
         <p>Sign in</p>
       </Button> : <AvatarPopover username={session?.user.username as string} image={session?.user.image as string} />}

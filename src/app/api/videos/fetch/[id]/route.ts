@@ -13,9 +13,23 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         title: true,
         description: true,
         url: true,
-        owner: true,
+        owner: {
+          select: {
+            id: true,
+            username: true,
+            image: true
+          }
+        },
         created_at: true,
         comments: true
+      }
+    })
+
+    if(!video) return new NextResponse("NOEXIST", { status: 404 })
+
+    const subscribers = await db.subscribers.count({
+      where: {
+        subscribedId: video?.owner.username
       }
     })
 
@@ -31,7 +45,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       }
     })
 
-    return NextResponse.json({ ...video, views, likes }, { status: 200 })
+    return NextResponse.json({ ...video, subscribers, views, likes }, { status: 200 })
   }
   catch(error){
     return NextResponse.json("Internal Error", { status: 500 })

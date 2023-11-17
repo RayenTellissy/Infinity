@@ -1,7 +1,7 @@
 "use client"
 import React, { useRef, useState } from 'react';
-import { v4 } from "uuid"
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { nanoid } from 'nanoid';
 
 // components
 import SelectFiles from "@/components/upload/SelectFiles"
@@ -29,7 +29,7 @@ const Upload = () => {
     })
     setScreen("uploading")
 
-    const storageRef = ref(storage, `videos/${v4()}`)
+    const storageRef = ref(storage, `videos/${nanoid()}`)
     const uploadTask = uploadBytesResumable(storageRef, file)
 
     uploadTask.on("state_changed", (snapshot) => {

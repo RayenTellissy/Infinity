@@ -1,19 +1,20 @@
 import React from 'react';
-
-// ui components
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Skeleton } from '../ui/skeleton';
+import Image from "next/image"
 
 type UserAvatarProps = {
   image: string | null | undefined
+  size?: number
 }
 
-const UserAvatar = ({ image }: UserAvatarProps) => {
+const UserAvatar = ({ image, size=40 }: UserAvatarProps) => {
   return (
-    <Avatar>
-      {image ? <AvatarImage src={image} />
-        : <AvatarFallback className='h-8 w-8 m-auto select-none'>?</AvatarFallback>}
-    </Avatar>
+    <>
+      {image ? <Image className='rounded-full' height={size} width={size} src={image} alt="user image"/>
+        : <div className='h-8 w-8 select-none dark:bg-zinc-700 bg-grayish text-white
+          rounded-full flex justify-center items-center'>
+            ?
+          </div>}
+    </>
   );
 };
 
