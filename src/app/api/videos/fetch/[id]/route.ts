@@ -40,15 +40,17 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       }
     })
 
-    const likes = await db.videoLikes.count({
+    const likes = await db.videoInteractions.count({
       where: {
-        videoId: params.id
+        videoId: params.id,
+        type: "like"
       }
     })
 
-    const dislikes = await db.videoDislikes.count({
+    const dislikes = await db.videoInteractions.count({
       where: {
-        videoId: params.id
+        videoId: params.id,
+        type: "dislike"
       }
     })
 

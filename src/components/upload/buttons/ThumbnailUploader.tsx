@@ -62,7 +62,7 @@ const ThumbnailUploader = ({ thumbnailUrl, setThumbnailUrl }: ThumbnailUploaderP
 
   if(thumbnailUrl) {
     return <div className='h-1/2 flex items-center justify-center'>
-      <Image alt='thumbnail prewview' height={300} width={533} className='rounded aspect-video' src={"https://firebasestorage.googleapis.com/v0/b/infinity-da509.appspot.com/o/thumbnails%2F0511f7a4-c4b1-4085-a84c-ad79b6570110?alt=media&token=56f1089a-9662-4b9b-9d89-e0780f9fed66"} />
+      <Image alt='thumbnail prewview' height={300} width={533} className='rounded aspect-video' src={thumbnailUrl} />
     </div>
   }
 };

@@ -8,19 +8,18 @@ datasource db {
 }
 
 model Users {
-  id            String          @id @default(cuid())
-  username      String          @unique
-  email         String          @unique
-  password      String
-  image         String?
-  created_at    DateTime        @default(now())
-  videos        Videos[]
-  videoLikes    VideoLikes[]
-  videoDislikes VideoDislikes[]
-  videoComments VideoComments[]
-  videoViews    VideoViews[]
-  subscribedTo  Subscribers[]   @relation("subscribedTo")
-  subscribers   Subscribers[]   @relation("subscribers")
+  id                String              @id @default(cuid())
+  username          String              @unique
+  email             String              @unique
+  password          String
+  image             String?
+  created_at        DateTime            @default(now())
+  videos            Videos[]
+  videoInteractions VideoInteractions[]
+  videoComments     VideoComments[]
+  videoViews        VideoViews[]
+  subscribedTo      Subscribers[]       @relation("subscribedTo")
+  subscribers       Subscribers[]       @relation("subscribers")
 }
 
 model Subscribers {
@@ -34,20 +33,19 @@ model Subscribers {
 }
 
 model Videos {
-  id          String          @id @default(cuid())
-  title       String
-  description String?
-  thumbnail   String
-  duration    Int
-  visibility  Visibility
-  owner       Users           @relation(fields: [ownerId], references: [id])
-  ownerId     String
-  url         String
-  created_at  DateTime        @default(now())
-  views       VideoViews[]
-  likes       VideoLikes[]
-  dislikes    VideoDislikes[]
-  comments    VideoComments[]
+  id           String              @id @default(cuid())
+  title        String
+  description  String?
+  thumbnail    String
+  duration     Int
+  visibility   Visibility
+  owner        Users               @relation(fields: [ownerId], references: [id])
+  ownerId      String
+  url          String
+  created_at   DateTime            @default(now())
+  views        VideoViews[]
+  comments     VideoComments[]
+  interactions VideoInteractions[]
 }
 
 model VideoViews {
@@ -56,24 +54,17 @@ model VideoViews {
   viewerId String
   video    Videos @relation(fields: [videoId], references: [id])
   videoId  String
+
+  @@unique([viewerId, videoId])
 }
 
-model VideoLikes {
-  id      String @id @default(cuid())
-  user    Users  @relation(fields: [userId], references: [id])
+model VideoInteractions {
+  id      String      @id @default(cuid())
+  user    Users       @relation(fields: [userId], references: [id])
   userId  String
-  video   Videos @relation(fields: [videoId], references: [id])
+  video   Videos      @relation(fields: [videoId], references: [id])
   videoId String
-
-  @@unique([userId, videoId])
-}
-
-model VideoDislikes {
-  id      String @id @default(cuid())
-  user    Users  @relation(fields: [userId], references: [id])
-  userId  String
-  video   Videos @relation(fields: [videoId], references: [id])
-  videoId String
+  type    Interaction
 
   @@unique([userId, videoId])
 }
@@ -91,4 +82,9 @@ model VideoComments {
 enum Visibility {
   public
   private
+}
+
+enum Interaction {
+  like
+  dislike
 }

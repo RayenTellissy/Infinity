@@ -90,7 +90,8 @@ const MiddleRow = ({ userId, userUsername, userImage, subscribers, likes, dislik
       userId,
       videoId
     })
-    return response.data
+    console.log(response.data)
+    return response.data as "liked" | "disliked"
   }
 
   const { data: interaction } = useQuery({
@@ -99,96 +100,47 @@ const MiddleRow = ({ userId, userUsername, userImage, subscribers, likes, dislik
   })
 
   const handleInteraction = async (action: "like" | "dislike") => {
+    // checking if the user is authenticated
     if(!session) return setInteractionModalOpen(true)
 
-    // add like
-    if(action === "like" && interaction === "none") {
-      await axios.post("/api/videos/addInteraction/like", {
-        userId,
-        videoId
-      })
-      queryClient.setQueryData(["interaction"], () => {
-        return "liked"
-      })
-      queryClient.setQueryData(["video"], (oldVideo: VideoType) => {
-        return {
-          ...oldVideo,
-          likes: oldVideo.likes + 1
-        }
-      })
-    }
-    // add like and remove dislike
-    else if(action === "like" && interaction === "disliked") {
-      await axios.post("/api/videos/addInteraction/like", {
-        userId,
-        videoId
-      })
-      await axios.post("/api/videos/removeInteraction/removeDislike", {
-        userId,
-        videoId
-      })
-      queryClient.setQueryData(["interaction"], () => {
-        return "liked"
-      })
-      queryClient.setQueryData(["video"], (oldVideo: VideoType) => {
-        return {
-          ...oldVideo,
-          dislikes: oldVideo.dislikes - 1,
-          likes: oldVideo.likes + 1
-        }
-      })
-    }
-    // remove like
-    else if(action === "like" && interaction === "liked") {
-      await axios.post("/api/videos/removeInteraction/removeLike", {
-        userId,
-        videoId
-      })
-      queryClient.setQueryData(["interaction"], () => {
-        return "none"
-      })
-      queryClient.setQueryData(["video"], (oldVideo: VideoType) => {
-        return {
-          ...oldVideo,
-          likes: oldVideo.likes - 1
-        }
-      })
-    }
-    // add dislike
-    else if(action === "dislike" && interaction === "none") {
-      await axios.post("/api/videos/addInteraction/dislike", {
-        userId,
-        videoId
-      })
-      queryClient.setQueryData(["interaction"], () => {
-        return "disliked"
-      })
-    }
-    // add dislike and remove like
-    else if(action === "dislike" && interaction === "liked") {
-      await axios.post("/api/videos/addInteraction/dislike", {
-        userId,
-        videoId
-      })
-      await axios.post("/api/videos/removeInteraction/removeLike", {
-        userId,
-        videoId
-      })
-      queryClient.setQueryData(["interaction"], () => {
-        return "disliked"
-      })
-    }
-    // remove dislike
-    else if(action === "dislike" && interaction === "disliked") {
-      await axios.post("/api/videos/removeInteraction/removeDislike", {
-        userId,
-        videoId
-      })
-      queryClient.setQueryData(["interaction"], () => {
-        return "none"
-      })
-    }
+    const response = await axios.post("/api/videos/handleInteractions", {
+      userId,
+      videoId,
+      type: action
+    })
+    return response.data
   }
+
+  const { mutate: mutateInteraction } = useMutation({
+    mutationFn: (action: "like" | "dislike") => handleInteraction(action),
+    onMutate: (action) => {
+      if(action === "like" && interaction === "none") {
+        queryClient.setQueryData(["videoInteraction"], () => { return "liked" })
+        queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, likes: oldVideo.likes + 1 } })
+      }
+      else if(action === "like" && interaction === "liked") {
+        console.log("entered")
+        queryClient.setQueryData(["videoInteraction"], () => { return "none" })
+        queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, likes: oldVideo.likes - 1 } })
+      }
+      else if(action === "like" && interaction === "disliked") {
+        queryClient.setQueryData(["videoInteraction"], () => { return "liked" })
+        queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, likes: oldVideo.likes + 1, dislikes: oldVideo.dislikes - 1 } })
+      }
+      else if(action === "dislike" && interaction === "none") {
+        queryClient.setQueryData(["videoInteraction"], () => { return "disliked" })
+        queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, dislikes: oldVideo.dislikes + 1 } })
+      }
+      else if(action === "dislike" && interaction === "disliked") {
+        queryClient.setQueryData(["videoInteraction"], () => { return "none" })
+        queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, dislikes: oldVideo.dislikes - 1 } })
+      }
+      else if(action === "dislike" && interaction === "liked") {
+        queryClient.setQueryData(["videoInteraction"], () => { return "disliked" })
+        queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, dislikes: oldVideo.dislikes + 1, likes: oldVideo.likes - 1 } })
+      }
+    }
+  })
 
   return (
     <div className='flex flex-row items-center justify-between'>
@@ -215,7 +167,7 @@ const MiddleRow = ({ userId, userUsername, userImage, subscribers, likes, dislik
       <div className='flex flex-row items-center'>
         <div className='flex flex-row rounded-3xl'>
           <button
-            onClick={() => handleInteraction("like")}
+            onClick={() => mutateInteraction("like")}
             className='dark:bg-[#262726] bg-[#f2f3f3] px-7 py-2 rounded-l-3xl flex flex-row items-center gap-2'
           >
             <ThumbsUp fill={interaction === "liked" ? "white" : "none"} />
@@ -223,7 +175,7 @@ const MiddleRow = ({ userId, userUsername, userImage, subscribers, likes, dislik
           </button>
           <Separator orientation='vertical' />
           <button
-            onClick={() => handleInteraction("dislike")}
+            onClick={() => mutateInteraction("dislike")}
             className='dark:bg-[#262726] bg-[#f2f3f3] px-7 py-2 rounded-e-3xl flex flex-row items-center gap-2'
           >
             <p>{ dislikes }</p>

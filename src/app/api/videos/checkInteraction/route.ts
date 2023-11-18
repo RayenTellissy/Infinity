@@ -11,23 +11,19 @@ export async function POST(req: NextRequest) {
 
     const { userId, videoId } = await req.json()
 
-    const isLiked = await db.videoLikes.findFirst({
+    const interaction = await db.videoInteractions.findFirst({
       where: {
         userId,
         videoId
+      },
+      select: {
+        type: true
       }
     })
 
-    if(isLiked) return new NextResponse("liked", { status: 200 })
-
-    const isDisliked = await db.videoDislikes.findFirst({
-      where: {
-        userId,
-        videoId
-      }
-    })
-
-    if(isDisliked) return new NextResponse("disliked", { status: 200 })
+    if(interaction) {
+      return new NextResponse(interaction.type === "like" ? "liked" : "disliked", { status: 200 })
+    }
 
     return new NextResponse("none", { status: 200 })
   }
