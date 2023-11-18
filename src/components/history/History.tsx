@@ -1,6 +1,5 @@
 "use client"
 import React from "react"
-import { Context } from "@/components/context/Context"
 
 // hooks
 import useLocalStorage from "@/hooks/useLocalStorage"

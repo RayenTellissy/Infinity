@@ -8,10 +8,11 @@ import { useSession } from 'next-auth/react';
 import VideoPlayer from './VideoPlayer';
 import Title from './content/Title';
 import MiddleRow from './content/MiddleRow';
+import SideVideos from './content/SideVideos';
+import VideoError from './content/VideoError';
 
 // hooks
 import { useCon } from '../context/Context';
-import VideoError from './content/VideoError';
 
 type VideoProps = {
   videoId: string
@@ -69,15 +70,23 @@ const Video = ({ videoId }: VideoProps) => {
   }
 
   return (
-    <div className='flex-1 flex flex-col p-2 gap-3'>
-      <VideoPlayer videoUrl={video.url}/>
-      <Title title={video.title} />
-      <MiddleRow
-        userId={video.owner.id}
-        userUsername={video.owner.username}
-        userImage={video.owner.image}
-        subscribers={video.subscribers}
-      />
+    <div className='w-full flex flex-row'>
+      <div className='w-full max-w-[75%] flex flex-col p-2 gap-3'>
+        <VideoPlayer videoUrl={video.url}/>
+        <Title title={video.title} />
+        <MiddleRow
+          userId={video.owner.id}
+          userUsername={video.owner.username}
+          userImage={video.owner.image}
+          subscribers={video.subscribers}
+          likes={video.likes}
+          dislikes={video.dislikes}
+          videoId={video.id}
+        />
+      </div>
+      <div className='flex justify-start'>
+        <SideVideos />
+      </div>
     </div>
   );
 };

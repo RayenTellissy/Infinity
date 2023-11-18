@@ -10,7 +10,7 @@ import { useCon } from "@/components/context/Context"
 import Video from './Video';
 
 // types
-import { VideoType } from '@/types/types';
+import { HomeVideo } from '@/types/types';
 
 const Home = () => {
   const { setCurrentPage } = useCon()
@@ -22,9 +22,7 @@ const Home = () => {
 
   const fetchVideos = async () => {
     try {
-      const response = await axios.get("/api/videos/fetch", {
-        withCredentials: true
-      })
+      const response = await axios.get("/api/videos/fetch")
       return response.data
     }
     catch(error) {
@@ -43,7 +41,7 @@ const Home = () => {
 
   return (
     <div className='flex-1 w-full grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] p-6'>
-      {videos && videos.length !== 0 && videos.map((e: VideoType, i: Key) => {
+      {videos && videos.length !== 0 && videos.map((e: HomeVideo, i: Key) => {
         return <Video
           key={i}
           id={e.id}

@@ -8,7 +8,11 @@ export async function GET(req: NextRequest) {
     const videos = await db.videos.findMany({
       include: {
         owner: true,
-        views: true
+        views: {
+          select: {
+            id: true
+          }
+        }
       }
     })
 

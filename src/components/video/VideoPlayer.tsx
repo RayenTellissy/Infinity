@@ -269,7 +269,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
     setVolume(video.volume - 0.05)
   }
 
-  return <div id='video-container' className='group w-[90%] max-w-[950px] flex justify-center relative'>
+  return <div id='video-container' className='group flex justify-center relative'>
     {(!isFullscreen || (isFullscreen && fullscreenControls)) && <div
       className={`absolute group-hover:opacity-100 ${isPlaying ? "opacity-0" : "opacity-100"}
       bottom-0 left-0 right-0 text-white z-[100] transition-opacity duration-200 ease-in-out`}

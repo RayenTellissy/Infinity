@@ -16,6 +16,7 @@ model Users {
   created_at    DateTime        @default(now())
   videos        Videos[]
   videoLikes    VideoLikes[]
+  videoDislikes VideoDislikes[]
   videoComments VideoComments[]
   videoViews    VideoViews[]
   subscribedTo  Subscribers[]   @relation("subscribedTo")
@@ -45,6 +46,7 @@ model Videos {
   created_at  DateTime        @default(now())
   views       VideoViews[]
   likes       VideoLikes[]
+  dislikes    VideoDislikes[]
   comments    VideoComments[]
 }
 
@@ -62,6 +64,18 @@ model VideoLikes {
   userId  String
   video   Videos @relation(fields: [videoId], references: [id])
   videoId String
+
+  @@unique([userId, videoId])
+}
+
+model VideoDislikes {
+  id      String @id @default(cuid())
+  user    Users  @relation(fields: [userId], references: [id])
+  userId  String
+  video   Videos @relation(fields: [videoId], references: [id])
+  videoId String
+
+  @@unique([userId, videoId])
 }
 
 model VideoComments {

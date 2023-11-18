@@ -9,16 +9,16 @@ export async function POST(req: NextRequest) {
     const session = await getSession()
     if(!session) return new NextResponse("UNAUTHORIZED", { status: 401 })
 
-    const { subscriberId, subscribedId } = await req.json()
+    const { userId, videoId } = await req.json()
 
-    await db.subscribers.create({
+    await db.videoDislikes.create({
       data: {
-        subscriberId,
-        subscribedId
+        userId,
+        videoId
       }
     })
 
-    return new NextResponse("subscribed successfully.", { status: 200 })
+    return new NextResponse("disliked video!", { status: 200 })
   }
   catch(error) {
     return NextResponse.json(error, { status: 500 })

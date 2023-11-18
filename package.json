@@ -30,7 +30,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "firebase": "^10.5.2",
-    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.290.0",
     "nanoid": "^5.0.2",
     "next": "^14.0.1",
@@ -44,8 +43,6 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.1",
-    "@types/cookie": "^0.5.3",
-    "@types/jsonwebtoken": "^9.0.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

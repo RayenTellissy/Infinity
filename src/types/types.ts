@@ -9,9 +9,29 @@ export type VideoType = {
   ownerId: string
   url: string
   created_at: Date
-  likes: []
+  likes: number
+  dislikes: number
+  comments: []
+  views: number
+  subscribers: number
+}
+
+export type HomeVideo = {
+  id: string
+  title: string
+  description?: string
+  thumbnail: string
+  duration: number
+  visibility: "public" | "private"
+  owner: User
+  ownerId: string
+  url: string
+  created_at: Date
+  likes: number
+  dislikes: number
   comments: []
   views: []
+  subscribers: number
 }
 
 export type User = {
