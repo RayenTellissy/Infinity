@@ -1,9 +1,14 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 
-const ButtonLoader = () => {
+type ButtonLoaderProps = {
+  size?: number
+  color?: string
+}
+
+const ButtonLoader = ({ size = 30, color = "#FFFFFF" }: ButtonLoaderProps) => {
   return (
-    <Loader2 className='animate-spin' />
+    <Loader2 size={size} color={color} className='animate-spin' />
   );
 };
 

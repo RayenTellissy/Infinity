@@ -15,6 +15,9 @@ import UserAvatar from '@/components/common/UserAvatar';
 import IconButton from '@/components/common/IconButton';
 import Shortcuts from './Shortcuts';
 
+// helpers
+import navigate from '@/helpers/navigate';
+
 type AvatarPopoverProps = {
   username: string
   image: string
@@ -65,7 +68,7 @@ const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
             <IconButton
               icon={<UserCog2 />}
               text='Account settings'
-              callback={() => window.location.href = "/settings"}
+              callback={() => navigate("/settings")}
             />
             <IconButton
               icon={<LogOut />}

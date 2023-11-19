@@ -11,6 +11,8 @@ export async function POST(req: NextRequest) {
 
     const { subscriberId, subscribedId } = await req.json()
 
+    if(subscriberId === subscribedId) return new NextResponse("can't subscribe to yourself", { status: 401 })
+
     await db.subscribers.create({
       data: {
         subscriberId,

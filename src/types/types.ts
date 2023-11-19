@@ -41,3 +41,17 @@ export type User = {
   image?: string
   created_at?: string
 }
+
+export type CommentsType = {
+  id: string
+  user: {
+    id: string
+    username: string
+    image: string
+  },
+  userId: string
+  video: VideoType
+  videoId: string
+  comment: string
+  created_at: Date
+}

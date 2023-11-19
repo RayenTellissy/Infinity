@@ -70,8 +70,8 @@ const Video = ({ videoId }: VideoProps) => {
   }
 
   return (
-    <div className='w-full flex flex-row'>
-      <div className='w-full max-w-[75%] flex flex-col p-2 gap-3'>
+    <div className='flex-1 flex flex-row'>
+      <div className='w-full max-w-[70%] flex flex-col p-2 gap-3'>
         <VideoPlayer videoUrl={video.url}/>
         <Title title={video.title} />
         <MiddleRow
@@ -82,6 +82,10 @@ const Video = ({ videoId }: VideoProps) => {
           likes={video.likes}
           dislikes={video.dislikes}
           videoId={video.id}
+          views={video.views}
+          created_at={video.created_at}
+          description={video.description}
+          comments={video.comments}
         />
       </div>
       <div className='flex justify-start'>

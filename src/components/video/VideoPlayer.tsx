@@ -116,7 +116,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
   const handleKeyDown = (e: KeyboardEvent) => {
     // if we are tabbed into an input element, return
     const activeElement = document.activeElement?.tagName.toLowerCase()
-    if(activeElement === "INPUT") return
+    if(activeElement === "input") return
 
     // when space bar is pressed toggle play
     if(e.key === " ") {
@@ -274,7 +274,7 @@ const VideoPlayer = ({ videoUrl }: VideoPlayerProps) => {
       className={`absolute group-hover:opacity-100 ${isPlaying ? "opacity-0" : "opacity-100"}
       bottom-0 left-0 right-0 text-white z-[100] transition-opacity duration-200 ease-in-out`}
     >
-      <div id='video-player-controls-background' className='video-player-controls-background rounded'/>
+      <div className='video-player-controls-background rounded'/>
       <Timeline scrubbingTime={scrubbingTime} />
       <div className='flex items-center gap-3 p-4 justify-between'>
         <div className='flex flex-row gap-6 w-[250px]'>

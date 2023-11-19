@@ -21,7 +21,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className='w-56 flex flex-col p-3'>
+    <div className='w-[224px] flex flex-col p-3'>
       <SidebarButton text="Home" icon={<Home />} route="/"/>
       <SidebarButton text="Your Channel" icon={<User2 />} route={handleMyChannel()}/>
       <SidebarSeperator />

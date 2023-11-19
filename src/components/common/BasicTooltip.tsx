@@ -6,16 +6,18 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 type BasicTooltipProps = {
   children: React.ReactNode
   text: string
+  styling?: string
+  delay?: number
 }
 
-const BasicTooltip = ({ children, text }: BasicTooltipProps) => {
+const BasicTooltip = ({ children, text, styling, delay = 0 }: BasicTooltipProps) => {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={delay}>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           { children }
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent className={styling}>
           { text }
         </TooltipContent>
       </Tooltip>
