@@ -57,13 +57,13 @@ const Auth = () => {
         password,
         redirect: false
       })
-      setIsLoading(false)
-      // if the user logged in succesfully, redirect him to main page
+      // if the user logged in outer.push("/")y, redirect him to main page
       if(response?.ok) return router.push("/")
       if(response?.error) {
         if(response.error === "INCUSR") return handleWrongUsername()
         if(response.error === "INCPWD") return handleWrongPassword()
       }
+      setIsLoading(false)
     }
     catch(error: any) {
       console.log(error)

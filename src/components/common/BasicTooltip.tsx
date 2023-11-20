@@ -8,17 +8,25 @@ type BasicTooltipProps = {
   text: string
   styling?: string
   delay?: number
+  side?: "top" | "bottom" | "right" | "left"
+  align?: "center" | "start" | "end"
+  variant?: "gray" | "default"
 }
 
-const BasicTooltip = ({ children, text, styling, delay = 0 }: BasicTooltipProps) => {
+const BasicTooltip = ({ children, text, styling, delay = 0, side, align, variant = "default" }: BasicTooltipProps) => {
+  const variants = {
+    gray: "mt-3 bg-grayish border-none opacity-90",
+    default: ""
+  }
+
   return (
     <TooltipProvider delayDuration={delay}>
       <Tooltip>
         <TooltipTrigger asChild>
-          { children }
+          {children}
         </TooltipTrigger>
-        <TooltipContent className={styling}>
-          { text }
+        <TooltipContent className={`${styling} ${variants[variant]}`} side={side} align={align}>
+          {text}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

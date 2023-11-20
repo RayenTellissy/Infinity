@@ -13,7 +13,7 @@ import { Separator } from '@/components/ui/separator';
 // components
 import UserAvatar from '@/components/common/UserAvatar';
 import IconButton from '@/components/common/IconButton';
-import Shortcuts from './Shortcuts';
+import Shortcuts from '../Shortcuts';
 
 // helpers
 import navigate from '@/helpers/navigate';
@@ -25,10 +25,10 @@ type AvatarPopoverProps = {
 
 const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
   const { theme, setTheme } = useTheme()
-  const [modalOpen,setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const handleTheme = () => {
-    if(theme === "light") return setTheme("dark")
+    if (theme === "light") return setTheme("dark")
     setTheme("light")
   }
 
@@ -48,7 +48,7 @@ const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
               <UserAvatar image={image} />
             </div>
             <div className='flex flex-col gap-2'>
-              <p className='text-lg font-medium'>{ username }</p>
+              <p className='text-lg font-medium'>{username}</p>
               <Link className="text-sm text-[#007bff]" href={`/channel/${username}`}>View your channel</Link>
             </div>
           </div>

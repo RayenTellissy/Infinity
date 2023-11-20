@@ -135,6 +135,7 @@ const MiddleRow = ({
   const { mutate: mutateInteraction } = useMutation({
     mutationFn: (action: "like" | "dislike") => handleInteraction(action),
     onMutate: (action) => {
+      if(!session) return
       if (action === "like" && interaction === "none") {
         queryClient.setQueryData(["videoInteraction"], () => { return "liked" })
         queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, likes: oldVideo.likes + 1 } })

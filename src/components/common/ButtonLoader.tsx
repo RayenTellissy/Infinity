@@ -6,9 +6,13 @@ type ButtonLoaderProps = {
   color?: string
 }
 
-const ButtonLoader = ({ size = 30, color = "#FFFFFF" }: ButtonLoaderProps) => {
+const ButtonLoader = ({ size = 30, color }: ButtonLoaderProps) => {
   return (
-    <Loader2 size={size} color={color} className='animate-spin' />
+    <Loader2
+      size={size}
+      color={color}
+      className="animate-spin"
+    />
   );
 };
 

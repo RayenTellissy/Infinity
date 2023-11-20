@@ -15,6 +15,10 @@ import ButtonLoader from '@/components/common/ButtonLoader';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from '@/components/ui/toast';
+
+// helpers
+import navigate from '@/helpers/navigate';
 
 type CommentsProps = {
   comments: CommentsType[]
@@ -32,9 +36,10 @@ const Comments = ({ comments, videoId }: CommentsProps) => {
   }
 
   const handleSubmit = async () => {
-    if(!session || !comment) return
+    if(!session) throw new Error("UNAUTHORIZED")
+    if(!comment) throw new Error("MISSING_INFORMATION")
     const response = await axios.post("/api/videos/comments/create", {
-      userId: session.user.id,
+      userId: session?.user.id,
       videoId,
       comment
     })
@@ -55,11 +60,25 @@ const Comments = ({ comments, videoId }: CommentsProps) => {
         }
       })
     },
-    onError: () => {
+    onError: (error) => {
+      if(error.message === "MISSING_INFORMATION") {
+        return toast({
+          variant: "destructive",
+          description: "Required information is missing.",
+          duration: 1500
+        })
+      }
+      if(error.message === "UNAUTHORIZED") {
+        return toast({
+          action: <ToastAction altText='Sign in' onClick={() => navigate("/auth")}>Sign in</ToastAction>,
+          description: "You need to be logged in to comment.",
+          duration: 2000
+        })
+      }
       toast({
         variant: "destructive",
         description: "We ran into a problem while creating your comment...",
-        duration: 3000
+        duration: 1500
       })
     }
   })

@@ -11,6 +11,8 @@ export async function POST(req: NextRequest) {
 
     const { userId, videoId, comment } = await req.json()
 
+    if(!userId || !videoId || !comment) return new NextResponse("Required information missing.", { status: 500 })
+
     const newComment = await db.videoComments.create({
       data: {
         userId,
