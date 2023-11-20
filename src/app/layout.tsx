@@ -14,7 +14,8 @@ import { Toaster } from '@/components/ui/toaster'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Infinity'
+  title: 'Infinity',
+  description: "Discover and share captivating videos on Infinity. Join our vibrant community, explore diverse content, and unleash your creativity. Your go-to platform for entertainment and inspiration.",
 }
 
 export default function RootLayout({
