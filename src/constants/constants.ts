@@ -30,3 +30,6 @@ export const videoTags = [
 ]
 
 export const purpleButtonStyling = "bg-purple-600 hover:bg-purple-700 active:bg-purple-500 dark:text-white"
+
+export const videoMaxSize = 100 * 1024 * 1024 // 100MB
+export const thumbnailMaxSize = 1024 * 1024 // 1mb

@@ -4,6 +4,10 @@ import React from 'react';
 import UserAvatar from '@/components/common/UserAvatar';
 import formatCreatedAt from '@/helpers/formatCreatedAt';
 
+// helpers
+import navigate from '@/helpers/navigate';
+import Link from 'next/link';
+
 type CommentProps = {
   id: string // comment id
   username: string
@@ -15,12 +19,12 @@ type CommentProps = {
 const Comment = ({ id, username, image, comment, created_at }: CommentProps) => {
   return (
     <div className='flex flex-row gap-3'>
-      <div>
+      <button onClick={() => navigate(`/channel/${username}`)}>
         <UserAvatar image={image} />
-      </div>
+      </button>
       <div className='flex flex-col'>
         <div className='flex flex-row gap-2 items-center'>
-          <p className='font-bold'>{ username }</p>
+          <Link href={`/channel/${username}`} className='font-bold'>{ username }</Link>
           <p className='text-sm text-grayish'>{formatCreatedAt(created_at)}</p>
         </div>
         <p>{ comment }</p>

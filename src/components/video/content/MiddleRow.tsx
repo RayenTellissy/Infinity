@@ -13,10 +13,12 @@ import InteractionSkeleton from '../skeletons/InteractionSkeleton';
 import BasicTooltip from '@/components/common/BasicTooltip';
 import Description from './Description';
 import Comments from './comments/Comments';
+import ToastContent from './toasts/ToastContent';
 
 // ui components
 import { Button } from '@/components/ui/button';
 import { Separator } from "@/components/ui/separator"
+import { useToast } from '@/components/ui/use-toast';
 
 // types
 import { VideoType, CommentsType } from '@/types/types';
@@ -52,10 +54,11 @@ const MiddleRow = ({
   comments
 }: MiddleRowProps) => {
   const { data: session } = useSession()
+  const { theme } = useTheme()
+  const { toast } = useToast()
   const queryClient = useQueryClient()
   const [interactionModalOpen, setInteractionModalOpen] = useState(false)
   const [subscribeModalOpen, setSubscribeModalOpen] = useState(false)
-  const { theme } = useTheme()
 
   const subscribe = async () => {
     if (!session) return setSubscribeModalOpen(true)
@@ -139,26 +142,32 @@ const MiddleRow = ({
       if (action === "like" && interaction === "none") {
         queryClient.setQueryData(["videoInteraction"], () => { return "liked" })
         queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, likes: oldVideo.likes + 1 } })
+        toast({ variant: "small", action: <ToastContent title="Added like" status="liked" />, duration: 1500 })
       }
       else if (action === "like" && interaction === "liked") {
         queryClient.setQueryData(["videoInteraction"], () => { return "none" })
         queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, likes: oldVideo.likes - 1 } })
+        toast({ variant: "small", action: <ToastContent title="Removed like" status="none" />, duration: 1500 })
       }
       else if (action === "like" && interaction === "disliked") {
         queryClient.setQueryData(["videoInteraction"], () => { return "liked" })
         queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, likes: oldVideo.likes + 1, dislikes: oldVideo.dislikes - 1 } })
+        toast({ variant: "small", action: <ToastContent title="Added like" status="liked" />, duration: 1500 })
       }
       else if (action === "dislike" && interaction === "none") {
         queryClient.setQueryData(["videoInteraction"], () => { return "disliked" })
         queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, dislikes: oldVideo.dislikes + 1 } })
+        toast({ variant: "small", action: <ToastContent title="Added dislike" status="disliked" />, duration: 1500 })
       }
       else if (action === "dislike" && interaction === "disliked") {
         queryClient.setQueryData(["videoInteraction"], () => { return "none" })
         queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, dislikes: oldVideo.dislikes - 1 } })
+        toast({ variant: "small", action: <ToastContent title="Removed dislike" status="none" />, duration: 1500 })
       }
       else if (action === "dislike" && interaction === "liked") {
         queryClient.setQueryData(["videoInteraction"], () => { return "disliked" })
         queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, dislikes: oldVideo.dislikes + 1, likes: oldVideo.likes - 1 } })
+        toast({ variant: "small", action: <ToastContent title="Added dislike" status="disliked" />, duration: 1500 })
       }
     }
   })
