@@ -10,6 +10,7 @@ import Title from './content/Title';
 import MiddleRow from './content/MiddleRow';
 import SideVideos from './content/SideVideos';
 import VideoError from './content/VideoError';
+import Comments from './content/comments/Comments';
 
 // hooks
 import { useCon } from '../context/Context';
@@ -87,6 +88,7 @@ const Video = ({ videoId }: VideoProps) => {
           description={video.description}
           comments={video.comments}
         />
+        <Comments videoId={video.id} />
       </div>
       <div className='flex justify-start'>
         <SideVideos />

@@ -1,10 +1,10 @@
 import React, { Key, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 
 // types
-import { CommentsType, VideoType } from '@/types/types';
+import { CommentsType } from '@/types/types';
 
 // components
 import UserAvatar from '@/components/common/UserAvatar';
@@ -21,15 +21,25 @@ import { ToastAction } from '@/components/ui/toast';
 import navigate from '@/helpers/navigate';
 
 type CommentsProps = {
-  comments: CommentsType[]
   videoId: string
 }
 
-const Comments = ({ comments, videoId }: CommentsProps) => {
+const Comments = ({ videoId }: CommentsProps) => {
   const { data: session } = useSession()
   const [comment,setComment] = useState("")
   const { toast } = useToast()
   const queryClient = useQueryClient()
+
+  const fetchComments = async () => {
+    const response = await axios.get(`/api/videos/comments/fetch/${videoId}`)
+    console.log(response.data)
+    return response.data
+  }
+  
+  const { data: comments, isLoading } = useQuery({
+    queryFn: fetchComments,
+    queryKey: ["videoComments"]
+  })
 
   const clearComment = () => {
     setComment("")
@@ -50,14 +60,8 @@ const Comments = ({ comments, videoId }: CommentsProps) => {
     mutationFn: handleSubmit,
     onSettled: () => setComment(""),
     onSuccess: (newComment) => {
-      queryClient.setQueryData(["video"], (oldVideo: VideoType) => {
-        return {
-          ...oldVideo,
-          comments: [
-            ...oldVideo.comments,
-            newComment
-          ]
-        }
+      queryClient.setQueryData(["videoComments"], (oldComments: CommentsType[]) => {
+        return [...oldComments, newComment]
       })
     },
     onError: (error) => {
@@ -83,8 +87,23 @@ const Comments = ({ comments, videoId }: CommentsProps) => {
     }
   })
 
+  const countInteractions = (interactions: { type: "like" | "dislike" }[], type: "like" | "dislike") => {
+    if(!interactions.length) return 0
+    var count = 0
+    for(var i = 0; i < interactions.length; i++) {
+      if(interactions[i].type === type) count++
+    }
+    return count
+  }
+
+  if(isLoading) {
+    return <div className="w-full flex justify-center">
+      <ButtonLoader size={40} color='#A855F7' />
+    </div>
+  }
+
   return (
-    <div className='flex flex-col gap-5'>
+    <div className='flex flex-col gap-5 mt-2'>
       <p className='font-bold text-xl'>
         {comments.length} {comments.length === 1 ? "Comment" : "Comments"}
       </p>
@@ -116,6 +135,8 @@ const Comments = ({ comments, videoId }: CommentsProps) => {
             image={e.user.image}
             comment={e.comment}
             created_at={e.created_at}
+            likes={countInteractions(e.CommentInteractions, "like")}
+            dislikes={countInteractions(e.CommentInteractions, "dislike")}
           />
         })}
       </div>

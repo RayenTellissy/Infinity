@@ -54,4 +54,6 @@ export type CommentsType = {
   videoId: string
   comment: string
   created_at: Date
+  CommentInteractions: []
+  CommentReplies: []
 }

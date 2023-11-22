@@ -236,7 +236,7 @@ const MiddleRow = ({
         </div>
       </div>
       <Description views={views} created_at={created_at} description={description} />
-      <Comments comments={comments} videoId={videoId}/>
+      {/* <Comments comments={comments} videoId={videoId}/> */}
     </div>
   );
 };

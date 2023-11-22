@@ -22,19 +22,6 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
           }
         },
         created_at: true,
-        comments: {
-          select: {
-            id: true,
-            user: {
-              select: {
-                username: true,
-                image: true
-              }
-            },
-            comment: true,
-            created_at: true
-          }
-        }
       }
     })
 
