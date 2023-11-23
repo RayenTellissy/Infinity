@@ -32,7 +32,6 @@ const Comments = ({ videoId }: CommentsProps) => {
 
   const fetchComments = async () => {
     const response = await axios.get(`/api/videos/comments/fetch/${videoId}`)
-    console.log(response.data)
     return response.data
   }
   

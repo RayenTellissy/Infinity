@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from "next/image"
+import { useRouter } from 'next/navigation';
 
 // helpers
 import formatDuration from '@/helpers/formatDuration';
@@ -31,6 +32,7 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
   const [previewProgress, setPreviewProgress] = useState(0)
   const [previewMax, setPreviewMax] = useState(0)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     videoRef?.current?.addEventListener("timeupdate", handlePreviewTime)
@@ -68,7 +70,7 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
       className='aspect-video cursor-pointer'
       onMouseEnter={() => handlePlaying(true)}
       onMouseLeave={() => handlePlaying(false)}
-      onClick={() => window.location.href = `/video/${id}`}
+      onClick={() => router.push(`/video/${id}`)}
     >
       <div className='relative w-full'>
         <div className='relative'>

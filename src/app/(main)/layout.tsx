@@ -10,9 +10,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const { showSidebar, showNav } = useCon()
 
   return (
-    <div>
+    <div className='max-h-screen flex flex-col'>
       {showNav && <Navbar />}
-      <div className='flex flex-row'>
+      <div className='flex flex-row overflow-auto'>
         {showSidebar && <Sidebar />}
         { children }
       </div>

@@ -10,7 +10,7 @@ import RightElement from './Navbar/RightElement';
 const Navbar = () => {
 
   return (
-    <div className='p-2 flex flex-row items-center'>
+    <div className='p-3 flex flex-row items-center'>
       <LeftElement />
       <Input className='w-1/3 m-auto' placeholder='Search' />
       <RightElement />
