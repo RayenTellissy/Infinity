@@ -2,6 +2,7 @@ import React, { Key, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 // types
 import { CommentsType } from '@/types/types';
@@ -17,9 +18,6 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 
-// helpers
-import navigate from '@/helpers/navigate';
-
 type CommentsProps = {
   videoId: string
 }
@@ -29,6 +27,7 @@ const Comments = ({ videoId }: CommentsProps) => {
   const [comment,setComment] = useState("")
   const { toast } = useToast()
   const queryClient = useQueryClient()
+  const router = useRouter()
 
   const fetchComments = async () => {
     const response = await axios.get(`/api/videos/comments/fetch/${videoId}`)
@@ -73,7 +72,7 @@ const Comments = ({ videoId }: CommentsProps) => {
       }
       if(error.message === "UNAUTHORIZED") {
         return toast({
-          action: <ToastAction altText='Sign in' onClick={() => navigate("/auth")}>Sign in</ToastAction>,
+          action: <ToastAction altText='Sign in' onClick={() => router.push("/auth")}>Sign in</ToastAction>,
           description: "You need to be logged in to comment.",
           duration: 2000
         })

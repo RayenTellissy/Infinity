@@ -2,12 +2,6 @@
 import React from 'react';
 import { useSession } from 'next-auth/react';
 
-// ui components
-import { Button } from '@/components/ui/button';
-
-// icons
-import { Upload, UserCircle2 } from 'lucide-react';
-
 // components
 import AuthLoading from './AuthLoading';
 import AvatarPopover from './Buttons/AvatarPopover';

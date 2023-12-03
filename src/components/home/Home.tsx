@@ -1,10 +1,7 @@
 "use client"
-import React, { Key, useEffect } from 'react';
+import React, { Key } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-
-// hooks
-import { useCon } from "@/components/context/Context"
 
 // components
 import Video from './Video';
@@ -13,12 +10,6 @@ import Video from './Video';
 import { HomeVideo } from '@/types/types';
 
 const Home = () => {
-  const { setCurrentPage } = useCon()
-
-  useEffect(() => {
-    setCurrentPage("Home")
-    return () => setCurrentPage("")
-  }, [])
 
   const fetchVideos = async () => {
     try {

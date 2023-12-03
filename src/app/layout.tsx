@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import TopLoader from "nextjs-toploader"
 import { Inter } from 'next/font/google'
 import '@/app/globals.css'
 
@@ -35,6 +36,7 @@ export default function RootLayout({
           >
             <ReactQueryProvider>
               <ContextProvider>
+                <TopLoader color='#840ffa' showSpinner={false} />
                 {children}
                 <Toaster />
               </ContextProvider>

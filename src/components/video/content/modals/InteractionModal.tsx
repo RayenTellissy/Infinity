@@ -1,4 +1,6 @@
+"use client"
 import React, { SetStateAction } from 'react';
+import { useRouter } from 'next/navigation';
 
 // ui components
 import {
@@ -10,15 +12,14 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button';
 
-// helpers
-import navigate from '@/helpers/navigate';
-
 type InteractionModalProps = {
   isOpen: boolean
   setIsOpen: React.Dispatch<SetStateAction<boolean>>
 }
 
 const InteractionModal = ({ isOpen, setIsOpen }: InteractionModalProps) => {
+  const router = useRouter()  
+
   return (
     <Dialog open={isOpen}>
       <DialogContent>
@@ -28,7 +29,7 @@ const InteractionModal = ({ isOpen, setIsOpen }: InteractionModalProps) => {
         <div>You need to be logged in to add interactions to a video.</div>
         <DialogFooter>
           <Button variant="outline" onClick={() => setIsOpen(false)}>Dismiss</Button>
-          <Button onClick={() => navigate("/auth")}>Log in</Button>
+          <Button onClick={() => router.push("/auth")}>Log in</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

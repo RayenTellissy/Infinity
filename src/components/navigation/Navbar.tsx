@@ -8,7 +8,6 @@ import LeftElement from './Navbar/LeftElement';
 import RightElement from './Navbar/RightElement';
 
 const Navbar = () => {
-
   return (
     <div className='p-3 flex flex-row items-center'>
       <LeftElement />

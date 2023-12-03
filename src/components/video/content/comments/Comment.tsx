@@ -1,4 +1,6 @@
 import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 // components
 import UserAvatar from '@/components/common/UserAvatar';
@@ -6,10 +8,6 @@ import formatCreatedAt from '@/helpers/formatCreatedAt';
 
 // ui components
 import { Button } from '@/components/ui/button';
-
-// helpers
-import navigate from '@/helpers/navigate';
-import Link from 'next/link';
 
 // icons
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
@@ -25,10 +23,11 @@ type CommentProps = {
 }
 
 const Comment = ({ id, username, image, comment, created_at, likes, dislikes }: CommentProps) => {
+  const router = useRouter()
 
   return (
     <div className='flex flex-row gap-3'>
-      <button className='flex flex-col' onClick={() => navigate(`/channel/${username}`)}>
+      <button className='flex flex-col' onClick={() => router.push(`/channel/${username}`)}>
         <UserAvatar image={image} />
       </button>
       <div className='flex flex-col'>

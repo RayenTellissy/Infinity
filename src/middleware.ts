@@ -5,5 +5,6 @@ export const config = { matcher: [
   "/subscriptions",
   "/watchlater",
   "/channel/:path*",
-  "/upload"
+  "/upload",
+  "/settings"
 ]}

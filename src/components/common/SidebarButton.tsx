@@ -1,8 +1,6 @@
+"use client"
 import React from 'react';
-import { useRouter } from 'next/navigation';
-
-// hooks
-import { useCon } from "@/components/context/Context"
+import { useRouter, usePathname } from 'next/navigation';
 
 // ui components
 import { Button } from '../ui/button';
@@ -14,11 +12,11 @@ type SidebarButtonProps = {
 }
 
 const SidebarButton = ({ text, route, icon }: SidebarButtonProps) => {
-  const { currentPage } = useCon()
   const router = useRouter()
+  const path = usePathname()
 
   return <Button
-    className={`flex flex-row items-center justify-start gap-5 ${currentPage === text && "bg-accent"}`}
+    className={`flex flex-row items-center justify-start gap-5 ${path === route && "bg-accent"}`}
     variant="ghost"
     onClick={() => router.push(route)}
   >

@@ -1,7 +1,9 @@
+"use client"
 import React, { useState } from 'react';
 import Link from "next/link"
 import { useTheme } from 'next-themes';
 import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 // icons
 import { Moon, Sun, Keyboard, UserCog2, LogOut } from 'lucide-react';
@@ -15,9 +17,6 @@ import UserAvatar from '@/components/common/UserAvatar';
 import IconButton from '@/components/common/IconButton';
 import Shortcuts from '../Shortcuts';
 
-// helpers
-import navigate from '@/helpers/navigate';
-
 type AvatarPopoverProps = {
   username: string
   image: string
@@ -26,6 +25,7 @@ type AvatarPopoverProps = {
 const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
   const { theme, setTheme } = useTheme()
   const [modalOpen, setModalOpen] = useState(false)
+  const router = useRouter()
 
   const handleTheme = () => {
     if (theme === "light") return setTheme("dark")
@@ -68,7 +68,7 @@ const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
             <IconButton
               icon={<UserCog2 />}
               text='Account settings'
-              callback={() => navigate("/settings")}
+              callback={() => router.push("/settings")}
             />
             <IconButton
               icon={<LogOut />}
