@@ -7,9 +7,6 @@ import { Button } from '@/components/ui/button';
 // components
 import UserAvatar from '@/components/common/UserAvatar';
 
-// helpers
-import navigate from '@/helpers/navigate';
-
 type SidebarChannelProps = {
   username: string
   image: string | null
