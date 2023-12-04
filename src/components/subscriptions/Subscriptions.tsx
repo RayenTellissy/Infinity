@@ -1,20 +1,11 @@
-"use client"
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 // components
 import Loader from "@/components/common/Loader";
 
-// hooks
-import { useCon } from "../context/Context";
-
 const Subscriptions = () => {
-  const { setCurrentPage } = useCon()
-
-  useEffect(() => {
-    setCurrentPage("Subscriptions")
-  }, [])
 
   const fetchSubscriptions = async () => {
     // const response = await axios.get(`/api/subscriptions/${id}`)
