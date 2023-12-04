@@ -12,19 +12,14 @@ import SideVideos from './content/SideVideos';
 import VideoError from './content/VideoError';
 import Comments from './content/comments/Comments';
 
-// hooks
-import { useCon } from '../context/Context';
-
-type VideoProps = {
+  type VideoProps = {
   videoId: string
 }
 
 const Video = ({ videoId }: VideoProps) => {
-  const { setCurrentPage } = useCon()
   const { data: session } = useSession()
 
   useEffect(() => {
-    setCurrentPage("video")
     mutateView()
   }, [])
   

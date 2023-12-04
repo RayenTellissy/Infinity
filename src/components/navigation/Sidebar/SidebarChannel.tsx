@@ -1,8 +1,7 @@
+"use client"
 import React from 'react';
-import { useRouter } from 'next/navigation';
-
-// ui components
-import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 // components
 import UserAvatar from '@/components/common/UserAvatar';
@@ -13,19 +12,22 @@ type SidebarChannelProps = {
 }
 
 const SidebarChannel = ({ username, image }: SidebarChannelProps) => {
-  const router = useRouter()
+  const path = usePathname()
+
+  const isInChannel = () => {
+    return path === `/channel/${username}`
+  }
 
   return (
-    <Button
-      variant="ghost"
-      className='flex flex-row justify-start w-full h-11 p-2 rounded-xl'
-      onClick={() => router.push(`/channel/${username}`)}
+    <Link
+      className={`flex flex-row justify-start w-full h-11 p-2 rounded-xl py-2 hover:bg-accent ${isInChannel() && "bg-accent"}`}
+      href={`/channel/${username}`}
     >
       <div className='mr-3'>
-        <UserAvatar image={image} />
+        <UserAvatar size={30} image={image} />
       </div>
       { username }
-    </Button>
+    </Link>
   );
 };
 

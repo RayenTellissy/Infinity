@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -12,7 +13,6 @@ import SubscribeModal from './modals/SubscribeModal';
 import InteractionSkeleton from '../skeletons/InteractionSkeleton';
 import BasicTooltip from '@/components/common/BasicTooltip';
 import Description from './Description';
-import Comments from './comments/Comments';
 import ToastContent from './toasts/ToastContent';
 
 // ui components
@@ -50,8 +50,7 @@ const MiddleRow = ({
   videoId,
   views,
   created_at,
-  description,
-  comments
+  description
 }: MiddleRowProps) => {
   const { data: session } = useSession()
   const { theme } = useTheme()
@@ -185,7 +184,7 @@ const MiddleRow = ({
         />
         <div className='flex flex-row items-center gap-4'>
           <div>
-            <UserAvatar image={userImage} size={80} />
+            <UserAvatar image={userImage} />
           </div>
           <div className='flex flex-col'>
             <a href={`/channel/${userUsername}`} className='font-semibold text-lg inline-block'>{userUsername}</a>
@@ -236,7 +235,6 @@ const MiddleRow = ({
         </div>
       </div>
       <Description views={views} created_at={created_at} description={description} />
-      {/* <Comments comments={comments} videoId={videoId}/> */}
     </div>
   );
 };

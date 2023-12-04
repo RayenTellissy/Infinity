@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from "next/image"
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 // helpers
 import formatDuration from '@/helpers/formatDuration';
@@ -67,11 +68,11 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
   }
 
   return (
-    <div
+    <Link
       className='aspect-video cursor-pointer'
       onMouseEnter={() => handlePlaying(true)}
       onMouseLeave={() => handlePlaying(false)}
-      onClick={() => router.push(`/video/${id}`)}
+      href={`/video/${id}`}
     >
       <div className='relative w-full'>
         <div className='relative'>
@@ -104,7 +105,7 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
         </div>
         <div className='flex flex-row gap-2 py-2'>
           <div className='my-1'>
-            <UserAvatar image={ownerImage} />
+            <UserAvatar image={ownerImage} size={36} />
           </div>
           <div className='flex flex-col gap-0.5 items-start justify-start'>
             <p className='font-medium'>{title}</p>
@@ -128,7 +129,7 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -2,6 +2,8 @@ import React, { Key } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+
+// components
 import SidebarChannel from './SidebarChannel';
 
 type SubscriptionType = {

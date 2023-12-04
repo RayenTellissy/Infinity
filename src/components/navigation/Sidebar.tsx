@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import SidebarButton from "@/components/common/SidebarButton"
 import SidebarSeperator from "@/components/common/SidebarSeperator"
 import SidebarSubscriptions from "@/components/navigation/Sidebar/SidebarSubscriptions"
-import NoSessionSubscriptions from './NoSession/NoSessionSubscriptions';
+import NoSessionSubscriptions from './Sidebar/NoSession/NoSessionSubscriptions';
 
 // icons
 import { Home, Rss, User2, LayoutDashboard, History, Clock4 } from "lucide-react"

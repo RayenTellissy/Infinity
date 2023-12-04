@@ -1,9 +1,7 @@
 "use client"
 import React from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-
-// ui components
-import { Button } from '../ui/button';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type SidebarButtonProps = {
   text: string
@@ -12,17 +10,15 @@ type SidebarButtonProps = {
 }
 
 const SidebarButton = ({ text, route, icon }: SidebarButtonProps) => {
-  const router = useRouter()
   const path = usePathname()
 
-  return <Button
-    className={`flex flex-row items-center justify-start gap-5 ${path === route && "bg-accent"}`}
-    variant="ghost"
-    onClick={() => router.push(route)}
+  return <Link
+    className={`flex flex-row items-center justify-start gap-5 text-sm ${path === route && "bg-accent"} px-3 py-2 rounded-lg hover:bg-accent`}
+    href={route}
   >
     { icon && icon }
     { text }
-  </Button>
+  </Link>
 };
 
 export default SidebarButton;

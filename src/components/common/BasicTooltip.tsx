@@ -15,7 +15,7 @@ type BasicTooltipProps = {
 
 const BasicTooltip = ({ children, text, styling, delay = 0, side, align, variant = "default" }: BasicTooltipProps) => {
   const variants = {
-    gray: "mt-3 bg-grayish border-none opacity-90",
+    gray: "text-white mt-3 bg-grayish border-none opacity-90",
     default: ""
   }
 
