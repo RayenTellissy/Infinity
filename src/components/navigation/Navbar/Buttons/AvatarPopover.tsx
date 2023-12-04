@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Link from "next/link"
 import { useTheme } from 'next-themes';
 import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 
 // icons
 import { Moon, Sun, Keyboard, UserCog2, LogOut } from 'lucide-react';
@@ -15,6 +14,7 @@ import { Separator } from '@/components/ui/separator';
 // components
 import UserAvatar from '@/components/common/UserAvatar';
 import IconButton from '@/components/common/IconButton';
+import IconLink from '@/components/common/IconLink';
 import Shortcuts from '../Shortcuts';
 
 type AvatarPopoverProps = {
@@ -25,7 +25,6 @@ type AvatarPopoverProps = {
 const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
   const { theme, setTheme } = useTheme()
   const [modalOpen, setModalOpen] = useState(false)
-  const router = useRouter()
 
   const handleTheme = () => {
     if (theme === "light") return setTheme("dark")
@@ -65,10 +64,10 @@ const AvatarPopover = ({ username, image }: AvatarPopoverProps) => {
               text='Keyboard shortcuts'
               callback={openShortcuts}
             />
-            <IconButton
+            <IconLink
               icon={<UserCog2 />}
               text='Account settings'
-              callback={() => router.push("/settings")}
+              route={"/settings"}
             />
             <IconButton
               icon={<LogOut />}
