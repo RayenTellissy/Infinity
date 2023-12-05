@@ -15,7 +15,7 @@ const Home = () => {
     try {
       const response = await axios.get("/api/videos/fetch")
       return response.data
-    }
+    } 
     catch(error) {
       console.log(error)
     }

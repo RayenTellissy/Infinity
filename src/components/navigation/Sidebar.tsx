@@ -20,7 +20,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className='w-[224px] flex flex-col p-3 sticky top-0 overflow-y-auto'>
+    <div className='w-[100px] xl:w-[224px] hidden sm:flex flex-col p-3 sticky top-0 overflow-y-auto'>
       <SidebarButton text="Home" icon={<Home />} route="/"/>
       <SidebarButton text="Your Channel" icon={<User2 />} route={handleMyChannel()}/>
       <SidebarSeperator />
@@ -28,8 +28,10 @@ const Sidebar = () => {
       <SidebarButton text="Subscriptions" icon={<Rss />} route="/subscriptions"/>
       <SidebarButton text="History" icon={<History />} route='/history'/>
       <SidebarButton text="Watch later" icon={<Clock4 />} route='/watchlater'/>
-      <SidebarSeperator />
-      {session ? <SidebarSubscriptions /> : <NoSessionSubscriptions />}
+      <div className='hidden xl:block'>
+        <SidebarSeperator />
+        {session ? <SidebarSubscriptions /> : <NoSessionSubscriptions />}
+      </div>
     </div>
   );
 };

@@ -1,24 +1,22 @@
-"use client"
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 // icons
 import { Upload } from 'lucide-react';
 
-// ui components
-import { Button } from '@/components/ui/button';
-
 // components
 import BasicTooltip from '@/components/common/BasicTooltip';
+import IconLink from '@/components/common/IconLink';
 
 const UploadButton = () => {
-  const router = useRouter()
 
   return (
     <BasicTooltip text='Upload' variant="gray">
-      <Button className='w-10 h-10 p-0 rounded-full' variant="ghost" onClick={() => router.push("/upload")}>
-        <Upload />
-      </Button>
+      <Link href="/upload" className='h-10 w-10 flex flex-row items-center justify-center gap-3 rounded-full hover:bg-accent py-2 px-4'>
+        <div>
+          <Upload />
+        </div>
+      </Link>
     </BasicTooltip>
   );
 };

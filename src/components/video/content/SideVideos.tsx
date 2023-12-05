@@ -2,7 +2,7 @@ import React from 'react';
 
 const SideVideos = () => {
   return (
-    <div>
+    <div className='hidden xl:flex justify-start'>
       side videos
     </div>
   );

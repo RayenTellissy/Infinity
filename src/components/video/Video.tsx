@@ -12,7 +12,7 @@ import SideVideos from './content/SideVideos';
 import VideoError from './content/VideoError';
 import Comments from './content/comments/Comments';
 
-  type VideoProps = {
+type VideoProps = {
   videoId: string
 }
 
@@ -22,21 +22,21 @@ const Video = ({ videoId }: VideoProps) => {
   useEffect(() => {
     mutateView()
   }, [])
-  
+
   const fetchVideo = async () => {
     try {
       const response = await axios.get(`/api/videos/fetch/${videoId}`)
       return response.data
     }
-    catch(error) {
-      if(axios.isAxiosError(error)) {
-        if(error.response?.data === "NOEXIST") {
+    catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data === "NOEXIST") {
           throw new Error("NOEXIST")
         }
       }
     }
   }
-  
+
   const { data: video, isLoading, error } = useQuery({
     queryFn: fetchVideo,
     queryKey: ["video"],
@@ -45,7 +45,7 @@ const Video = ({ videoId }: VideoProps) => {
   })
 
   const viewVideo = async () => {
-    if(!session) return
+    if (!session) return
     const response = await axios.post("/api/videos/view", {
       userId: session.user.id,
       videoId
@@ -57,18 +57,18 @@ const Video = ({ videoId }: VideoProps) => {
     mutationFn: viewVideo
   })
 
-  if(isLoading) {
+  if (isLoading) {
     return <div>Loading video...</div>
   }
 
-  if(error) {
+  if (error) {
     return <VideoError />
   }
 
   return (
     <div className='flex-1 flex flex-row'>
-      <div className='w-full max-w-[70%] flex flex-col p-2 gap-3'>
-        <VideoPlayer videoUrl={video.url}/>
+      <div className='w-full xl:max-w-[70%] flex flex-col p-2 gap-3'>
+        <VideoPlayer videoUrl={video.url} />
         <Title title={video.title} />
         <MiddleRow
           userId={video.owner.id}
@@ -85,9 +85,7 @@ const Video = ({ videoId }: VideoProps) => {
         />
         <Comments videoId={video.id} />
       </div>
-      <div className='flex justify-start'>
-        <SideVideos />
-      </div>
+      <SideVideos />
     </div>
   );
 };
