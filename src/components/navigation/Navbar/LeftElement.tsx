@@ -15,7 +15,7 @@ const LeftElement = () => {
 
   return (
     <>
-      <Button className='p-0' size="icon" variant="icon" onClick={hideSidebar}>
+      <Button aria-label='sidebar controller' className='p-0' size="icon" variant="icon" onClick={hideSidebar}>
         <AlignJustify />
       </Button>
       <p>Infinity</p>
