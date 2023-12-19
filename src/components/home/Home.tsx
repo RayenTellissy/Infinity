@@ -31,7 +31,7 @@ const Home = () => {
   }
 
   return (
-    <div className='flex-1 w-full grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] p-6'>
+    <div className='flex-1 w-full grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] p-0 md:p-6'>
       {videos && videos.length !== 0 && videos.map((e: HomeVideo, i: Key) => {
         return <Video
           key={i}

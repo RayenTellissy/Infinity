@@ -80,7 +80,7 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
             alt='video thumbnail'
             height={152}
             width={270}
-            className={`w-full h-full object-fill aspect-video ${isPlaying ? "rounded-none opacity-0" : "rounded-lg"}
+            className={`w-full h-full object-fill aspect-video ${isPlaying ? "rounded-none opacity-0" : "rounded-none sm:rounded-lg"}
             transition-opacity duration-200`}
             src={thumbnail}
             placeholder='empty'
@@ -103,7 +103,7 @@ const Video = ({ id, title, thumbnail, duration, videoUrl, views, created_at, ow
             className='h-1 absolute bottom-0 bg-gray-600 bg-opacity-60 rounded-none'
           />
         </div>
-        <div className='flex flex-row gap-2 py-2'>
+        <div className='flex flex-row gap-2 py-2 px-2 sm:px-0'>
           <div className='my-1'>
             <UserAvatar image={ownerImage} size={36} />
           </div>

@@ -1,6 +1,6 @@
 "use client"
 import React, { useCallback } from 'react';
-import { useDropzone } from "react-dropzone"
+import { DropEvent, FileRejection, useDropzone } from "react-dropzone"
 
 // ui components
 import { Button } from "@/components/ui/button"
@@ -30,7 +30,7 @@ const SelectFiles = ({ fileInputRef, uploadFile }: SelectFilesProps) => {
   
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: {
     "video/mp4": []
-  }, maxFiles: 1, onDropRejected: onDragRejected})
+  }, maxFiles: 1, onDropRejected: onDragRejected })
 
   
   return (

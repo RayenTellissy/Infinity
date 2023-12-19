@@ -12,7 +12,9 @@ type FullscreenButtonProps = {
 const FullscreenButton = ({ isFullscreen, toggleFullscreen, buttonHoverEffect }: FullscreenButtonProps) => {
   return (
     <button className={buttonHoverEffect} onClick={toggleFullscreen}>
-      {isFullscreen ? <Minimize size={40} /> : <Maximize size={40} />}
+      {isFullscreen
+        ? <Minimize className='w-[30px] h-[30px] md:w-[50px] md:h-[50px]' />
+        : <Maximize className='w-[30px] h-[30px] md:w-[50px] md:h-[50px]' />}
     </button>
   );
 };

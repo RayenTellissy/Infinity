@@ -12,8 +12,8 @@ type PlayButtonProps = {
 const PlayButton = ({ isPlaying, togglePlay, buttonHoverEffect }: PlayButtonProps) => {
   return (
     <button id='video-play-button' className={`flex flex-row ${buttonHoverEffect}`} onClick={togglePlay}>
-      {!isPlaying ? <Play fill="white" size={40} />
-        : <Pause fill='white' size={40} />}
+      {!isPlaying ? <Play className='w-[25px] h-[25px] md:w-[40px] md:h-[40px]' fill="white" />
+        : <Pause className='w-[25px] h-[25px] md:w-[40px] md:h-[40px]' fill='white' />}
     </button>
   );
 };

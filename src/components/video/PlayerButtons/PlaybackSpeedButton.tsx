@@ -7,7 +7,7 @@ type PlaybackSpeedButtonProps = {
 
 const PlaybackSpeedButton = ({ changePlaybackSpeed, playbackSpeed }: PlaybackSpeedButtonProps) => {
   return (
-    <button className='text-2xl font-bold' onClick={changePlaybackSpeed}>
+    <button className='text-2xl font-bold text-[20px] md:text-[30px]' onClick={changePlaybackSpeed}>
       x{playbackSpeed && playbackSpeed}
     </button>
   );

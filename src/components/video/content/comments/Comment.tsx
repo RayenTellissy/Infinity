@@ -1,6 +1,8 @@
+"use client"
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 
 // components
 import UserAvatar from '@/components/common/UserAvatar';
@@ -23,13 +25,16 @@ type CommentProps = {
 }
 
 const Comment = ({ id, username, image, comment, created_at, likes, dislikes }: CommentProps) => {
-  const router = useRouter()
+
+  const handleInteraction = () => {
+    
+  }
 
   return (
     <div className='flex flex-row gap-3'>
-      <button className='flex flex-col' onClick={() => router.push(`/channel/${username}`)}>
+      <Link className='flex flex-col' href={`/channel/${username}`}>
         <UserAvatar image={image} />
-      </button>
+      </Link>
       <div className='flex flex-col'>
         <div className='flex flex-row gap-2 items-center'>
           <Link href={`/channel/${username}`} className='font-bold'>{username}</Link>

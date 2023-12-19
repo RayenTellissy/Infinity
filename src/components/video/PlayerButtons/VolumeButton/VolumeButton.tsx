@@ -17,10 +17,10 @@ type VolumeButtonProps = {
 const VolumeButton = ({ volume, volumeState, toggleMute, changeVolume, buttonHoverEffect }: VolumeButtonProps) => {
 
   const volumeDisplay = {
-    muted: <VolumeX size={40} />,
-    low: <Volume size={40} />,
-    medium: <Volume1 size={40} />,
-    high: <Volume2 size={40} />
+    muted: <VolumeX className='w-[25px] h-[25px] md:w-[40px] md:h-[40px]' />,
+    low: <Volume className='w-[25px] h-[25px] md:w-[40px] md:h-[40px]' />,
+    medium: <Volume1 className='w-[25px] h-[25px] md:w-[40px] md:h-[40px]' />,
+    high: <Volume2 className='w-[25px] h-[25px] md:w-[40px] md:h-[40px]' />
   }
 
   return (

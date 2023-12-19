@@ -25,6 +25,7 @@ import { VideoType, CommentsType } from '@/types/types';
 
 // icons
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import MobileButtons from './mobile/MobileButtons';
 
 type MiddleRowProps = {
   userId: string
@@ -137,7 +138,7 @@ const MiddleRow = ({
   const { mutate: mutateInteraction } = useMutation({
     mutationFn: (action: "like" | "dislike") => handleInteraction(action),
     onMutate: (action) => {
-      if(!session) return
+      if (!session) return
       if (action === "like" && interaction === "none") {
         queryClient.setQueryData(["videoInteraction"], () => { return "liked" })
         queryClient.setQueryData(["video"], (oldVideo: VideoType) => { return { ...oldVideo, likes: oldVideo.likes + 1 } })
@@ -173,7 +174,7 @@ const MiddleRow = ({
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className='flex flex-row items-center justify-between'>
+      <div className='flex flex-row items-center'>
         <InteractionModal
           isOpen={interactionModalOpen}
           setIsOpen={setInteractionModalOpen}
@@ -182,24 +183,26 @@ const MiddleRow = ({
           isOpen={subscribeModalOpen}
           setIsOpen={setSubscribeModalOpen}
         />
-        <div className='flex flex-row items-center gap-4'>
-          <div>
-            <UserAvatar image={userImage} />
-          </div>
-          <div className='flex flex-col'>
-            <a href={`/channel/${userUsername}`} className='font-semibold text-lg inline-block'>{userUsername}</a>
-            <p>{subscribers} subscribers</p>
+        <div className='flex flex-row items-center justify-between w-full'>
+          <div className='flex flex-row gap-4 items-center'>
+            <div>
+              <UserAvatar image={userImage} />
+            </div>
+            <div className='flex flex-col'>
+              <a href={`/channel/${userUsername}`} className='font-semibold text-lg inline-block'>{userUsername}</a>
+              <p>{subscribers} subscribers</p>
+            </div>
           </div>
           {!isLoading ? (session?.user.id !== userId && <Button
             className={`rounded-3xl ${isSubscribed ?
-              "dark:bg-[#262726] dark:hover:bg-[#3f3e3e] bg-[#f2f3f3] hover:bg-[#e5e5e5] dark:text-white text-black" : ""}`}
+              "text-[13px] dark:bg-[#262726] dark:hover:bg-[#3f3e3e] bg-[#f2f3f3] hover:bg-[#e5e5e5] dark:text-white text-black" : ""}`}
             onClick={() => mutateSubscribe()}
           >
             {isSubscribed ? "Subscribed" : "Subscribe"}
           </Button>) : <SubscribeSkeleton />}
         </div>
         <div className='flex flex-row items-center'>
-          <div className='flex flex-row rounded-3xl'>
+          <div className='hidden md:flex flex-row rounded-3xl'>
             {interaction ? <>
               <BasicTooltip
                 text={interaction === "liked" ? "Unlike" : 'I like this'}
@@ -234,6 +237,7 @@ const MiddleRow = ({
           </div>
         </div>
       </div>
+      <MobileButtons interaction={interaction} mutateInteraction={mutateInteraction} likes={likes} dislikes={dislikes} />
       <Description views={views} created_at={created_at} description={description} />
     </div>
   );
