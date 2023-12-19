@@ -23,8 +23,8 @@ const MobileButtons = ({ interaction, likes, dislikes, mutateInteraction }: Mobi
   const { theme } = useTheme()
 
   return (
-    <div className='flex flex-row gap-2'>
-      <div className='flex flex-row md:hidden'>
+    <div className='flex flex-row gap-2 md:hidden'>
+      <div className='flex flex-row'>
         {interaction ? <>
           <BasicTooltip
             text={interaction === "liked" ? "Unlike" : 'I like this'}

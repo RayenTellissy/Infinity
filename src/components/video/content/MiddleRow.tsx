@@ -183,7 +183,7 @@ const MiddleRow = ({
           isOpen={subscribeModalOpen}
           setIsOpen={setSubscribeModalOpen}
         />
-        <div className='flex flex-row items-center justify-between w-full'>
+        <div className='flex flex-row items-center justify-between md:justify-normal md:gap-4 w-full'>
           <div className='flex flex-row gap-4 items-center'>
             <div>
               <UserAvatar image={userImage} />
