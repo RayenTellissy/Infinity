@@ -83,7 +83,8 @@ const Video = ({ videoId }: VideoProps) => {
           description={video.description}
           comments={video.comments}
         />
-        <Comments videoId={video.id} />
+        {/* comments is bugged if i ever return to this project this needs to be fixed */}
+        {/* <Comments videoId={video.id} /> */}
       </div>
       <SideVideos />
     </div>
